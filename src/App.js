@@ -1,25 +1,48 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import DispatchHome from './components/DispatchHome.js';
+import PublicHome from './components/PublicHome.js';
+import './stylesheets/App.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-function App() {
+import Meow from './containers/Meow.js'
+
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid>
+    	<div id="titlebar">
+			<span id='title-main-Container'>
+				<h1 id="title-main" class='title'>
+					The Board
+				</h1>
+			</span>
+			<span id='session-status-Container'>
+				{/*
+					if !session
+						<LoginForm />
+					else
+						{User Name / Info}
+						<Logout Button>
+				*/}
+			</span>
+			<span id="hamburger-menu-Container">
+				{/*
+					<HamburgerMenu />
+				*/}
+			</span>
+    	</div>
+
+    	<div id="app-body">
+        <Router>
+        	<Route exact path='/' component={PublicHome} />
+          <Route path='/dispatch' render={routerProps => <DispatchHome {...routerProps} />} />
+        </Router>
+		</div>
+		<div id="footer">
+			<h6>Blah Blah Blah</h6>
+		</div>
+  </Container>
   );
 }
 
