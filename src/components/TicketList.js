@@ -3,8 +3,10 @@ import TicketPreview from './TicketPreview.js';
 import { Accordion, Col, Row, Button, Form, Container, Tab } from 'react-bootstrap';
 import FilterTicketsForm from './FilterTicketsForm.js'
 import NewTicket from './NewTicket.js';
+import SearchForm from './SearchForm.js';
 
 class TicketList extends React.Component {
+
 
 
 	render() {
@@ -48,8 +50,19 @@ class TicketList extends React.Component {
 							</Accordion.Toggle>
 
 							<Accordion.Collapse eventKey={'filtersForm'}>
+								<Col md={8}>
 								<FilterTicketsForm
-									handleSort={this.props.handleSort}/>
+									handleSort={this.props.handleSort}
+									filterTickets={this.props.filterTickets}
+									/>
+								<SearchForm
+									tickets={this.props.searchRes}
+									couriers={this.props.couriers}
+									clients={this.props.clients}
+									couriers={this.props.couriers}
+									search={this.props.search}
+								/>
+								</Col>
 							</Accordion.Collapse>
 						</Col>
 					</Row>

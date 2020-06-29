@@ -6,26 +6,19 @@ import ClientList from "../containers/ClientList.js";
 import StatusBar from "./StatusBar";
 import NewTicket from './NewTicket.js';
 import SearchForm from './SearchForm.js';
+import NewUser from './NewUser.js';
 import moment from 'moment';
 import { Container, Row, Col, Tab, Tabs, Nav, Button, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
-
-
-
-const TICKETS_API = 'http://localhost:3000/tickets';
-const ACTIVE_TICKETS_API = 'http://localhost:3000/tickets/active';
-const CLIENTS_API = 'http://localhost:3000/clients';
-const COURIERS_API = 'http://localhost:3000/couriers';
-const HEADERS = {
-	'Content-Type': 'application/json',
-	'Accept': 'application/json'
-}
+import { TICKETS_API, ACTIVE_TICKETS_API, TICKETS_TODAY_API, CLIENTS_API, COURIERS_API, HEADERS } from '../_helpers/Apis.js'
 
 class DispatchHome extends React.Component {
 
 	state = {
 		clients: [],
 		couriers: [],
+		ticketsToday: [],
+		filteredClients: [],
 		filteredCouriers: [],
 		ticketSearchResults: [],
 		ticketsLoaded: false,
@@ -41,6 +34,7 @@ class DispatchHome extends React.Component {
 		.then( res => res.json() )
 		.then( clients => this.setState({
 			clients: clients,
+			filteredClients: clients.sort((a,b) => b.name < a.name ? 1 : -1)
 		}))
 	}
 
@@ -53,6 +47,17 @@ class DispatchHome extends React.Component {
 			couriers: couriers,
 			filteredCouriers: couriers.sort((a,b) => a.created_at < b.created_at)
 		 }))
+	}
+
+	fetchTicketsToday = () => {
+		fetch(TICKETS_TODAY_API)
+		.then( res => res.json() )
+		.then( ticketsToday => this.setState({
+				ticketsToday: ticketsToday,
+				filteredTickets: ticketsToday
+			}, () => {
+			this.handleFilterTickets(ticket => !ticket.is_complete)
+		}))
 	}
 
 	fetchActiveTickets = () => {
@@ -71,7 +76,7 @@ class DispatchHome extends React.Component {
 		.then( newTicket => {
 			console.log(newTicket)
 			this.setState(prevState => ({
-				tickets: [...prevState.tickets, newTicket].sort((a,b) => {
+				filteredTickets: [...prevState.filteredTickets, newTicket].sort((a,b) => {
 						return a.created_at < b.created_at
 					})
 			})
@@ -86,7 +91,7 @@ class DispatchHome extends React.Component {
 		})
 		.then( res => res.json() )
 		.then( ticket => {
-			const tickets = this.state.tickets;
+			const tickets = this.state.filteredTickets;
 			const oldTicket = tickets.find(t => t.id === ticket.id)
 			tickets.splice(tickets.indexOf(oldTicket),1,ticket)
 
@@ -101,7 +106,7 @@ class DispatchHome extends React.Component {
 		})
 		.then( res => res.json() )
 		.then( ticket => {
-			const tickets = this.state.tickets
+			const tickets = this.state.filteredTickets
 			const deletedTicket = tickets.find(t => t.id === ticket.id);
 			const index = tickets.indexOf(deletedTicket);
 			tickets.splice(index,1)
@@ -113,7 +118,7 @@ class DispatchHome extends React.Component {
 	handleSortTickets = (col,isDesc) => {
 
 		this.setState(prevState => ({
-			tickets: prevState.tickets.sort((a,b) => {
+			tickets: prevState.filteredTickets.sort((a,b) => {
 				// Active Record timestamps dont play well with moment.js sort. Convert them.
 				if ( col === 'created_at' ) {
 					return isDesc
@@ -129,12 +134,17 @@ class DispatchHome extends React.Component {
 	}
 
 	handleSortCouriers = (col,isDesc) => {
-		const filtered = [...this.state.filteredCouriers].sort((a,b) => {
+		const filteredCouriers = [...this.state.filteredCouriers].sort((a,b) => {
 			return !isDesc ? b[col] < a[col] : a[col] < b[col]
 		})
-		this.setState(prevState => ({
-			filteredCouriers: filtered
-		}))
+		this.setState(prevState => ({ filteredCouriers }))
+	}
+
+	handleSortClients = (col,isDesc) => {
+		const filteredClients = [...this.state.filteredClients].sort((a,b) => {
+			return isDesc ? b[col] < a[col] : a[col] < b[col]
+		})
+		this.setState(prevState => ({ filteredClients }))
 	}
 
 	getTicketById = id => {
@@ -181,8 +191,16 @@ class DispatchHome extends React.Component {
 		))
 	}
 
+	handleFilterClients = filter => {
+			this.setState(prevState => ({ filteredClients: prevState.clients.filter(filter) }))
+	}
+
 	handleFilterCouriers = filter => {
 		this.setState(prevState => ({ filteredCouriers: prevState.couriers.filter(filter) }))
+	}
+
+	handleFilterTickets = filter => {
+		this.setState(prevState => ({ filteredTickets: prevState.ticketsToday.filter(filter) }))
 	}
 
 	handleDeleteCourier = id => {
@@ -210,20 +228,27 @@ class DispatchHome extends React.Component {
 	componentWillMount() {
 		// Fetch with args ['unassigned', 'incomplete'] on first mount
 		// Hard coded for now (in handleTicketFilter()). Update once api built out
-		this.fetchActiveTickets();
+		this.fetchTicketsToday();
 		this.populatecouriers();
 		this.populateclients();
 	}
 
 	handleSearch = data => {
+		console.log(data)
+		const courier = this.state.couriers.find(c => c.full_name === data.courierName)
+		const client = this.state.clients.find(cl => cl.name === data.clientName)
+
+		let query = `${TICKETS_API}/search?start=${data.startDate.format()}&end=${data.endDate.format()}`;
+
+		if ( courier ) { query += `&courier_id=${courier.id}` }
+		if ( client ) { query += `&client_id=${client.id}` }
+
 		//alert(JSON.stringify(searchData, null, 4))
-		fetch(`${TICKETS_API}/search?
-			client_id=${data.client_id}&
-			courier_id=${data.courier_id}&
-			is_complete=${data.complete}
-			`)
+		fetch(query)
 			.then( res => res.json() )
-			.then( console.log )
+			.then( tickets => this.setState({
+				filteredTickets: tickets
+			}))
 	}
 
 	componentWillRecieveProps() {
@@ -232,6 +257,7 @@ class DispatchHome extends React.Component {
 	}
 
 	render() {
+		console.log(this.state)
 		return (
 			<Container fluid>
 				<Row>
@@ -286,30 +312,31 @@ class DispatchHome extends React.Component {
 
 									<li className='nav-item'>
 										<NavLink
-											to='/dispatch/search'
-											className='nav-link'
-											data-toggle='tab'
-											role='tab'
-											aria-controls='clients'
-											selected='false'
-											>
-											Search
-										</NavLink>
-									</li>
-
-									<li className='nav-item'>
-										<NavLink
 											to='/dispatch/invoices'
 											className='nav-link'
 											data-toggle='tab'
 											role='tab'
-											aria-controls='clients'
+											aria-controls='invoices'
 											selected='false'
 											>
 											Invoices
 										</NavLink>
 									</li>
-							</ul>
+
+										<li className='nav-item'>
+											<NavLink
+												to='/dispatch/new-user'
+												className='nav-link'
+												data-toggle='tab'
+												role='tab'
+												aria-controls='newUser'
+												selected='true'
+												>
+												New User
+											</NavLink>
+										</li>
+
+									</ul>
 							</Col>
 							</Row>
 
@@ -320,6 +347,7 @@ class DispatchHome extends React.Component {
 								<Route path='/dispatch/tickets'>
 									<TicketList
 										tickets={this.state.filteredTickets}
+										searchRes={this.state.ticketSearchResults}
 										clients={this.state.clients}
 										couriers={this.state.couriers}
 										selectTicket={this.selectTicketById}
@@ -327,12 +355,17 @@ class DispatchHome extends React.Component {
 										handleDelete={this.handleDeleteTicket}
 										handleSort={this.handleSortTickets}
 										handleNewTicket={this.handleNewTicket}
+										filterTickets={this.handleFilterTickets}
+										search={this.handleSearch}
 
 										 />
 								</Route>
 
 								<Route path='/dispatch/clients'>
-										<ClientList clients={this.state.clients} />
+										<ClientList
+											clients={this.state.filteredClients}
+											filterClients={this.handleFilterClients}
+										/>
 								</Route>
 
 								<Route path='/dispatch/couriers'>
@@ -347,18 +380,12 @@ class DispatchHome extends React.Component {
 										/>
 								</Route>
 
-								<Route path='/dispatch/search'>
-									<SearchForm
-										tickets={this.state.ticketSearchResults}
-										couriers={this.state.couriers}
-										clients={this.state.clients}
-										loaded={this.state.ticketsLoaded}
-										search={this.handleSearch}
-									/>
-								</Route>
-
 								<Route path='/dispatch/invoices'>
 									<h4>Invoices</h4>
+								</Route>
+
+								<Route path='/dispatch/new-user'>
+									<NewUser admin={true} />
 								</Route>
 							</Row>
 

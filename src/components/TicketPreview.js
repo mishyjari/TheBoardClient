@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { Accordion, Button, Card, Table, Row, Col, Modal} from 'react-bootstrap';
+import { Accordion, Button, Card, Table, Row, Col, Modal, Dropdown, DropdownButton } from 'react-bootstrap';
 import TicketDetail from './TicketDetail.js';
 import NewTicket from './NewTicket.js';
 import moment from 'moment';
@@ -16,9 +16,38 @@ const TicketPreview = props => {
   const { client, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props.ticket;
 
   const toggleComplete = () => {
-      const ticketData = {...props.ticket}
-      ticketData.is_complete = !is_complete
-      props.handleUpdate(ticketData)
+      props.ticket.is_complete = !is_complete
+      props.handleUpdate(props.ticket)
+  }
+
+  const assignTicket = courier_id => {
+    props.ticket.courier_id = courier_id;
+    props.handleUpdate(props.ticket)
+  }
+
+  const QuickAssign = () => {
+    return (
+      <div>
+        {
+          <DropdownButton
+            id='assignToCourier'
+            title='Unassigned'
+            variant='outline-primary'
+            size='lg'
+          >
+            <Dropdown.Header>Assign to Courier...</Dropdown.Header>
+            {
+              props.couriers.map(courier => <Dropdown.Item
+                eventKey={courier.id}
+                onClick={() => assignTicket(courier.id)}
+              >
+                {courier.full_name}
+              </Dropdown.Item>)
+            }
+          </DropdownButton>
+        }
+      </div>
+    )
   }
 
   return (
@@ -67,7 +96,7 @@ const TicketPreview = props => {
                     ?
                       courier.first_name + " " + courier.last_name
                     :
-                      "UNASSIGNED"
+                      <QuickAssign />
                   }
                 </td>
               </tr>
@@ -92,6 +121,7 @@ const TicketPreview = props => {
             {...props.ticket}
             handleUpdate={props.handleUpdate}
             handleDelete={props.handleDelete}
+            toggleComplete={toggleComplete}
             ticket={props.ticket}
             clients={props.clients}
 						couriers={props.couriers}

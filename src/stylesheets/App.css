@@ -1,3 +1,7 @@
+.bordered {
+	border: 1px solid black
+}
+
 .styled-link {
 	border: 1px solid 'light-blue';
 	border-radius: 5px;

@@ -25,9 +25,10 @@ class CourierList extends React.Component {
     }, () => {
       this.props.filterCouriers(courier => {
         const { full_name, email, phone } = courier;
-        return full_name.toLowerCase().includes(val)
-         || email.toLowerCase().includes(val)
-         || phone.includes(val)
+        const filter = this.state.filter;
+        return full_name.toLowerCase().includes(filter)
+         || email.toLowerCase().includes(filter)
+         || phone.includes(filter)
       })
     })
   }

@@ -46,15 +46,33 @@ class SearchForm extends React.Component {
     this.setState({ [e.target.name]: e.target.checked} )
   }
 
+  setDateOption = e => {
+    e.persist();
+    const val = e.target.value;
+    const newStartDate = val === "Today"
+    ?
+      moment().subtract('days', 1).startOf('day') :
+    val === "This Week" ?
+      moment().subtract('days', 7).startOf('day') :
+    val === "This Month" ?
+      moment().subtract('months', 1).startOf('day')
+    :
+      moment().subtract('years', 1).startOf('day')
+    this.setState({
+      dateOption: e.target.value,
+      startDate: newStartDate,
+      endDate: moment().endOf('day')
+    })
+  }
+
   render() {
     return (
       <Container fluid>
         <Form>
         <h4 className='title'>Search Tickets By...</h4>
-          <Form.Row>
 
           {/* Courier Search */}
-          <Form.Group as={Col}>
+          <Form.Row>
             <Form.Label>Courier: </Form.Label>
             <Form.Control
               name='courierName'
@@ -70,38 +88,38 @@ class SearchForm extends React.Component {
                 })
               }
             </Form.Control>
-          </Form.Group>
+          </Form.Row>
 
           {/* Client Search */}
-          <Form.Group as={Col}>
-            <Form.Label>Client: </Form.Label>
-            <Form.Control
-              name='clientName'
-              as='select'
-              value={this.state.clientName}
-              onChange={e => this.setState({ clientName: e.target.value })}
-            >
-              <option>Any Client</option>
-              <option>Guest Tickets</option>
-              {
-                this.props.clients.map(client => {
-                  return <option>{client.name}</option>
-                })
-              }
-            </Form.Control>
-          </Form.Group>
+          <Form.Row>
+              <Form.Label>Client: </Form.Label>
+              <Form.Control
+                name='clientName'
+                as='select'
+                value={this.state.clientName}
+                onChange={e => this.setState({ clientName: e.target.value })}
+              >
+                <option>Any Client</option>
+                <option>Guest Tickets</option>
+                {
+                  this.props.clients.map(client => {
+                    return <option>{client.name}</option>
+                  })
+                }
+              </Form.Control>
           </Form.Row>
+
 
           { /* Date Range */}
           <Form.Row>
-            <Form.Group as={Col} sm={"2"}>
+            <Form.Group as={Col}>
               <Form.Row>
                 <Form.Label column lg>Select Date Range As:</Form.Label>
                 <Form.Control
                   as="select"
                   name="dateOption"
                   value={this.state.dateOption}
-                  onChange={e => this.setState({ dateOption: e.target.value })}
+                  onChange={this.setDateOption}
                   sm={"2"}
                 >
                   <option>Select Date By...</option>
@@ -130,8 +148,7 @@ class SearchForm extends React.Component {
                 />
               </Form.Row>
             </Form.Group>
-
-            {/* Misc Option */}
+{/*
             <Form.Group as={Col}>
               <Form.Label>Filters: </Form.Label>
               <Form.Check
@@ -183,27 +200,19 @@ class SearchForm extends React.Component {
                 onChange={this.toggleSwitchState}
               />
             </Form.Group>
+*/}
           </Form.Row>
           <Form.Row>
-            {
-              !this.state.loading
-              ?
-                <Button
-                  type='submit'
-                  onClick={e => {
-                    e.preventDefault()
-                    console.log(this.state)
-                    this.props.search(this.state)
-                  }}
-                >
-                  Search
-                </Button>
-
-              :
-                <Button disabled>
-                  <ReactLoading type={'spokes'} height={25} width={15} />
-                </Button>
-            }
+            <Button
+              type='submit'
+              onClick={e => {
+                e.preventDefault()
+                console.log(this.state)
+                this.props.search(this.state)
+              }}
+            >
+              Search
+            </Button>
           </Form.Row>
 
 

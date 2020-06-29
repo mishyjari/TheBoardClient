@@ -11,12 +11,6 @@ const TicketDetail = props => {
 
   const { client, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
 
-  const toggleComplete = () => {
-      const ticketData = {...props};
-      ticketData.is_complete = !is_complete;
-      props.handleUpdate(ticketData);
-  }
-
   return (
     <Accordion>
       {/* Buttons */}
@@ -31,7 +25,7 @@ const TicketDetail = props => {
             variant='outline-success'
             block
             size='sm'
-            onClick={toggleComplete}
+            onClick={props.toggleComplete}
           >
             {
               is_complete
