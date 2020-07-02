@@ -1,6 +1,8 @@
 import React from 'react';
-import { Modal, Button, Container, Accordion, Row, Col, Card } from 'react-bootstrap';
+import moment from 'moment'
+import { Table, Modal, Button, Container, Accordion, Row, Col, Card, useAccordionToggle } from 'react-bootstrap';
 import NewTicket from './NewTicket.js';
+import PodCard from './PodCard.js';
 
 const TicketDetail = props => {
   // For toggling delete confirmation modal
@@ -9,9 +11,11 @@ const TicketDetail = props => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { client, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
+  const { base_charge, client, pod, time_delivered, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
+
 
   return (
+
     <Accordion>
       {/* Buttons */}
       <Row>
@@ -21,20 +25,31 @@ const TicketDetail = props => {
           </Accordion.Toggle>
         </Col>
         <Col>
-          <Button
-            variant='outline-success'
-            block
-            size='sm'
-            onClick={props.toggleComplete}
-          >
-            {
-              is_complete
-              ?
-                "Mark Incomplete"
-              :
-                "Mark Complete"
-            }
-          </Button>
+          {
+            is_complete
+            ?
+              <Button
+                variant='outline-dark'
+                block
+                size='sm'
+                onClick={props.toggleComplete}
+              >
+                Mark Incomplete
+              </Button>
+            :
+              <Accordion.Toggle
+                eventKey={'promptForPod'}
+                block
+                as={Button}
+                variant={'outline-success'}
+                size='sm'
+              >
+                Mark Complete
+              </Accordion.Toggle>
+          }
+          <Accordion.Collapse eventKey={'promptForPod'} id={'promptForPod'}>
+            <PodCard ticket={props.ticket} handleComplete={props.handleUpdate} />
+          </Accordion.Collapse>
         </Col>
         <Col>
           <Button
@@ -74,27 +89,93 @@ const TicketDetail = props => {
         </Col>
 
       </Row>
+      <Row>
+        <Col>
+          <Table striped hover>
+            <tbody>
+              <tr>
+                <th>Ordered</th>
+                <td>{moment(created_at).format("L, LT")}</td>
+              </tr>
+              <tr>
+                <th>Ready</th>
+                <td>{moment(time_ready).format("L, LT")}</td>
+              </tr>
+              <tr>
+                <th>Due</th>
+                <td>{moment(time_due).format("L, LT")}</td>
+              </tr>
+              <tr>
+                <th>Delivered</th>
+                <td>
+                  {
+                    time_delivered
+                    ?
+                      moment(created_at).format("L, LT")
+                    :
+                      null
+                  }
+                </td>
+              </tr>
+              <tr>
+                <th>Courier</th>
+                <td>
+                  {
+                    courier
+                    ?
+                      <em>{courier.first_name} {courier.last_name}</em>
+                    :
+                      'Unassigned'
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+        <Col>
+          <Table striped hover>
+            <tbody>
+              <tr>
+                <th>Client</th>
+                <td>{
+                    client
+                    ?
+                      client.name
+                    :
+                      null
+                  }</td>
+              </tr>
+              <tr>
+                <th>Pickup</th>
+                <td>{pickup}</td>
+              </tr>
+              <tr>
+                <th>Dropoff</th>
+                <td>{dropoff}</td>
+              </tr>
+              <tr>
+                <th>Recieved By</th>
+                <td>
+                  {
+                    pod
+                    ?
+                      pod
+                    :
+                      null
+                  }
+                </td>
+              </tr>
+              <tr>
+                <th>Charge</th>
+                <td>${base_charge}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
 
-      <ul>
-        <li>{
-            props.courier_id
-            ?
-              "Assigned to courier id " + props.courier_id
-            :
-              "Unassigned"
-          }</li>
-        <li><strong>Client: </strong>{
-          props.client_id
-          ?
-            "Client ID - " + props.client_id
-          :
-            "Guest Account"
-        }</li>
-      <li><strong>Ordered: </strong>{new Date(props.created_at).toLocaleString()}</li>
-      <li><strong>Ready: </strong>{new Date(props.time_ready).toLocaleString()}</li>
-      <li><strong>Due: </strong>{new Date(props.time_due).toLocaleString()}</li>
-      </ul>
       <Accordion.Collapse eventKey={`editTicket-${id}`}>
+
         <Card.Body>
           <NewTicket
             ticket={props.ticket}
@@ -103,6 +184,7 @@ const TicketDetail = props => {
             handleNewTicket={props.handleUpdate}
             />
         </Card.Body>
+
       </Accordion.Collapse>
 
     </Accordion>

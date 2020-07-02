@@ -65,6 +65,8 @@ class SearchForm extends React.Component {
     })
   }
 
+
+
   render() {
     return (
       <Container fluid>
@@ -148,67 +150,15 @@ class SearchForm extends React.Component {
                 />
               </Form.Row>
             </Form.Group>
-{/*
-            <Form.Group as={Col}>
-              <Form.Label>Filters: </Form.Label>
-              <Form.Check
-                type="switch"
-                name="incomplete"
-                id="incomplete"
-                label="Incomplete Tickets"
-                checked={this.state.incomplete}
-                onChange={this.toggleSwitchState}
-              />
-              <Form.Check
-                type="switch"
-                name="complete"
-                id="complete"
-                label="Completed Tickets"
-                checked={this.state.complete}
-                onChange={this.toggleSwitchState}
-              />
-              <Form.Check
-                type="switch"
-                name="late"
-                id="late"
-                label="Late Deliveries"
-                checked={this.state.late}
-                onChange={this.toggleSwitchState}
-              />
-              <Form.Check
-                type="switch"
-                name="rush"
-                id="rush"
-                label="Rush Tickets"
-                checked={this.state.rush}
-                onChange={this.toggleSwitchState}
-              />
-              <Form.Check
-                type="switch"
-                name="os"
-                id="os"
-                label="Oversize Tickets"
-                checked={this.state.os}
-                onChange={this.toggleSwitchState}
-              />
-              <Form.Check
-                type="switch"
-                name="rt"
-                id="rt"
-                label="Round-trip Tickets"
-                checked={this.state.rt}
-                onChange={this.toggleSwitchState}
-              />
-            </Form.Group>
-*/}
           </Form.Row>
           <Form.Row>
             <Button
               type='submit'
               onClick={e => {
+                document.getElementById('searchToggle').className='collapse'
                 e.preventDefault()
-                console.log(this.state)
                 this.props.search(this.state)
+
               }}
             >
               Search

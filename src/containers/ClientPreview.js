@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button, Table, Accordion, Row, Col, Container } from 'react-bootstrap';
+import NewClient from '../components/NewClient.js';
 
 const ClientPreview = props => {
   {/* Modal Handlers */}
@@ -7,19 +8,25 @@ const ClientPreview = props => {
   const handleClose = () => setShowClientDetail(false);
   const handleShow = () => setShowClientDetail(true);
 
+  const { client, clients, handleEdit } = props;
+
+  const toggleArchive = () => {
+    console.log('archive')
+  }
+
   return (
     <tr>
       <td>
-        {props.name}
+        {client.name}
       </td>
       <td>
-        {props.address}
+        {client.address}
       </td>
       <td>
-        {props.contact_phone}
+        {client.contact_phone}
       </td>
       <td>
-        {props.contact_person}
+        {client.contact_person}
       </td>
 
       <td>
@@ -36,32 +43,67 @@ const ClientPreview = props => {
       <Modal show={showClientDetail} onHide={handleClose}>
 
         <Modal.Header closeButton>
-          <Modal.Title>Detailed Information for {props.name}</Modal.Title>
+          <Modal.Title>{client.name}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <h1>MEOW</h1>
+
+          <NewClient
+            client={client}
+            handleEditClient={handleEdit}
+            close={handleClose}
+          />
+
+
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            variant={'outline-dark'}
-            onClick={() => alert('Not Implemented')}
-          >
-            Edit Details
-          </Button>
-          <Button
-            variant={'outline-warning'}
-            onClick={() => alert('Not Implemented')}
-          >
-            Archive Client
-          </Button>
-          <Button
-            variant={'outline-secondary'}
-            onClick={handleClose}
-          >
-              Close
-          </Button>
+
+        <Accordion>
+          <Row>
+            <Accordion.Toggle eventKey={'confirmDelete'} as={Button}
+             variant={'outline-danger'} id='deleteButton'>
+              Delete Client
+              </Accordion.Toggle>
+
+            <Button
+              variant={'outline-warning'}
+              onClick={toggleArchive}
+            >
+              {
+                props.client.is_archived
+                ?
+                  'Un-Archive Client'
+                :
+                  'Archive Client'
+              }
+            </Button>
+
+            <Button
+              variant={'outline-secondary'}
+              onClick={handleClose}
+            >
+                Close
+            </Button>
+
+          </Row>
+          <Row>
+          <Accordion.Collapse eventKey={'confirmDelete'}>
+            <Container fluid>
+              <h4 className='title'>Are you sure?<br /> This can not be undone!</h4>
+              <Button
+                variant={'danger'}
+                onClick={() => {
+                  props.handleDelete(client.id);
+                  handleClose();
+                }}
+              block >
+                Confirm Delete
+              </Button>
+            </Container>
+          </Accordion.Collapse>
+          </Row>
+          </Accordion>
         </Modal.Footer>
       </Modal>
     </tr>

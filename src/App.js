@@ -19,7 +19,6 @@ class App extends React.Component {
 
   componentWillMount() {
     const user_id = window.localStorage.user_id || window.sessionStorage.user_id
-    console.log(user_id)
     if ( user_id ) {
       fetch(`USERS_API/${user_id}`)
         .then( res => res.json() )
@@ -45,39 +44,17 @@ class App extends React.Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid id='main'>
         <Router>
         	<Row>
       			<Col>
-      				<NavLink
-                as="h1"
-                to='/'
-              >
+      				<h1 className='text-center logo'>
                 The Board
-              </NavLink>
-      			</Col>
-      			<Col>
-      				{
-                this.state.userSession
-                ?
-                  <Col>
-                    <h5>Logged in as {this.state.userSession.username}</h5>
-                  </Col>
-                :
-                  <Col>
-                    <h5>Not Logged In</h5>
-                  </Col>
-              }
-      			</Col>
-      			<Col>
-      				{/*
-      					<HamburgerMenu />
-      				*/}
+              </h1>
       			</Col>
           </Row>
 
-        	<div id="app-body">
-
+          <Container fluid className='content-main'>
         	<Route exact path='/' render={() => <PublicHome
               userSession={this.state.userSession}
               setUser={this.setUser}
@@ -97,8 +74,9 @@ class App extends React.Component {
             {...routerProps}
             />}
           />
+      </Container>
 
-    		</div>
+
     		<div id="footer">
     			<h6>Blah Blah Blah</h6>
     		</div>

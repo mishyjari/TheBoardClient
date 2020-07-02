@@ -7,8 +7,13 @@ class ClientList extends React.Component {
 
   state = {
     filter: '',
-    colSort: 'first_name',
-    sortOrderDesc: false
+    colSort: 'name',
+    sortOrderDesc: false,
+    selectedTicket: null
+  }
+
+  handleShowEditForm = e => {
+
   }
 
   handleFilter = e => {
@@ -29,6 +34,16 @@ class ClientList extends React.Component {
     })
   }
 
+  handleSort = col => {
+    const willToggle = col === this.state.colSort;
+
+    this.setState(prevState => ({
+      colSort: col,
+      sortOrderDesc : willToggle ? !prevState.sortOrderDesc : prevState.sortOrderDesc
+    }), () => {
+      this.props.sortClients(this.state.colSort, this.state.sortOrderDesc)
+    })
+  }
 
   render() {
     return (
@@ -54,30 +69,30 @@ class ClientList extends React.Component {
                 New Client
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={'newClient'} id={'newCourierToggle'}>
-                <NewClient handleSubmit={() => alert('meow')} clients={this.props.clients}/>
+                <NewClient handleNewClient={this.props.newClient} clients={this.props.clients}/>
               </Accordion.Collapse>
             </Accordion>
           </Col>
         </Row>
+        <Table hover striped>
+          <tr>
+            <th className='hover-pointer' onClick={() => this.handleSort('name')}>Name</th>
+            <th className='hover-pointer' onClick={() => this.handleSort('address')}>Address</th>
+            <th className='hover-pointer' onClick={() => this.handleSort('contact_phone')}>Phone</th>
+            <th className='hover-pointer' onClick={() => this.handleSort('contact_person')}>Contact Person</th>
+            <th></th>
+          </tr>
+          <tbody>
+          {
+            this.props.filteredClients.map(client => <ClientPreview
+              client={client}
+              handleEdit={this.props.editClient}
+              handleDelete={this.props.deleteClient}
+            />)
+          }
+          </tbody>
+        </Table>
 
-
-
-
-
-      <Table hover striped>
-        <tr>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Phone</th>
-          <th>Contact Person</th>
-          <th></th>
-        </tr>
-        <tbody>
-        {
-          this.props.clients.map(client => <ClientPreview {...client} />)
-        }
-        </tbody>
-      </Table>
       </Container>
     )
   }

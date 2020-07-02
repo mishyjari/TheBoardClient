@@ -1,5 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Container } from 'react-bootstrap';
+import moment from 'moment'
+import TicketFilters from './TicketFilters.js';
 
 class FilterTicketsForm extends React.Component {
 
@@ -12,28 +14,6 @@ class FilterTicketsForm extends React.Component {
     this.props.handleSort(val[0],Number(val[1]))
   }
 
-  filterTickets = e => {
-    e.persist();
-    const selectedFilter = e.target.value;
-    this.setState({ selectedFilter }, () => {
-      const filterTickets = this.props.filterTickets;
-      const filter = this.state.selectedFilter;
-
-      if ( filter === 'All Tickets Today' ) {
-        filterTickets(ticket => ticket)
-      }
-      else if ( filter === "Incomplete Only" ) {
-        filterTickets( ticket => !ticket.is_complete )
-      }
-      else if ( filter === "Complete Only" ) {
-        filterTickets( ticket => ticket.is_complete )
-      }
-      else if ( filter === "Unassigned Only" ) {
-        filterTickets( ticket => !ticket.courier )
-      }
-    })
-  }
-
 
   render() {
     return (
@@ -41,23 +21,11 @@ class FilterTicketsForm extends React.Component {
         <Form>
           <h4 className="title">Filters...</h4>
             <Form.Row>
-              <Form.Group as={Col}>
-                <Form.Label>
-                  Show:
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  name="selectedFilter"
-                  value={this.state.selectedFilter}
-                  onChange={this.filterTickets}
-                >
-                  <option>All Tickets Today</option>
-                  <option>Incomplete Only</option>
-                  <option>Complete Only</option>
-                  <option>Unassigned Only</option>
-                </Form.Control>
-              </Form.Group>
+
+              <TicketFilters filterTickets={this.props.filterTickets} />
+
             </Form.Row>
+
 
 
             <Form.Row>

@@ -8,7 +8,8 @@ class CourierList extends React.Component {
   state = {
     filter: '',
     colSort: 'first_name',
-    sortOrderDesc: false
+    sortOrderDesc: false,
+    showArchived: false,
   }
 
   toggleActive = courier => {
@@ -76,6 +77,16 @@ class CourierList extends React.Component {
             </Accordion>
           </Col>
         </Row>
+        <Row>
+          <Form.Check
+            type='switch'
+            label='Include Archived Couriers'
+            name='showArchivedCouriers'
+            id='showArchiveCouriersToggle'
+            checked={this.state.showArchived}
+            onChange={() => this.setState(prevState => ({ showArchived: !prevState.showArchived}), () => this.props.toggleShowArchived(this.state.showArchived))}
+          />
+        </Row>
         <Table hover striped>
           <tr>
           </tr>
@@ -84,14 +95,15 @@ class CourierList extends React.Component {
             <th className='hover-pointer' onClick={() => this.handleSort('phone')}>Phone Number</th>
             <th className='hover-pointer' onClick={() => this.handleSort('email')}>Email Address</th>
             <th className='hover-pointer' onClick={() => this.handleSort('radio_number')}>Radio Number</th>
-            <th className='hover-pointer' onClick={() => alert("Sort by ticket count not implemented")}>Incomplete Tickets</th>
+            <th className='hover-pointer' onClick={() => this.handleSort('incomplete_tickets')}>Incomplete Tickets</th>
             <th className='hover-pointer' onClick={() => this.handleSort('is_active')}>Active?</th>
             <th></th>
           </tr>
           <tbody>
           {
-            this.props.filteredCouriers.map(courier => <CourierPreview
+            this.props.couriers.map(courier => <CourierPreview
               courier={courier}
+              couriers={this.props.couriers}
               toggleActive={this.toggleActive}
               updateCourier={this.props.updateCourier}
               deleteCourier={this.props.deleteCourier}

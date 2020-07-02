@@ -9,15 +9,13 @@ const CourierPreview = props => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { id, full_name, phone, email, is_active, radio_number, tickets } = props.courier
-
-  const incompleteTickets = () => {
-    return tickets.filter(ticket => !ticket.is_complete)
-  }
+  const { id, full_name, phone, email, is_active, radio_number, tickets, incomplete_tickets, is_archived } = props.courier
 
   const toggleArchive = () => {
-    props.courier.is_archived = !props.courier.is_archived
-    props.updateCourier(props.courier)
+    const courier = {...props.courier}
+    courier.is_archived = !is_archived;
+    courier.is_active = false;
+    props.updateCourier(courier)
   }
 
 
@@ -25,7 +23,13 @@ const CourierPreview = props => {
 
     <tr>
       <td>
-        {full_name}
+        {
+          props.courier.is_archived
+          ?
+            <em>{full_name} (archived)</em>
+          :
+            <strong>{full_name}</strong>
+        }
       </td>
       <td>
         {phone}
@@ -37,11 +41,15 @@ const CourierPreview = props => {
         {radio_number}
       </td>
       <td>
-        {incompleteTickets().length}
+        {incomplete_tickets.length}
       </td>
 
       <td>
         {
+          is_archived
+          ?
+            <Button disabled size='sm' variant='outline-secondary'>X</Button>
+          :
           !is_active
           ?
             <Button
@@ -84,7 +92,7 @@ const CourierPreview = props => {
             courier={props.courier}
             handleSubmit={props.updateCourier}
             handleClose={handleClose}
-            />
+          />
 
         </Modal.Body>
 

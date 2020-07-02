@@ -145,7 +145,7 @@ class NewTicket extends React.Component {
 
   render() {
     return (
-      <Col>
+      <Col className='content-main'>
       <Form onSubmit={this.handleSubmitNewTicket}>
       {/* Select Client */}
         <Form.Group

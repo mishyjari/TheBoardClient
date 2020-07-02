@@ -37,6 +37,8 @@ const ClientDetail = props => {
           <Table>
             <tbody>
               <tr>
+              </tr>
+              <tr>
                 <td>Address</td>
                 <td>{props.address}</td>
               </tr>

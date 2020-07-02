@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, Link, Dropdown, Modal } from 'react-bootstrap';
+import { Accordion, Button, Link, Dropdown, Modal, Table, Container, Row, Col, Badge } from 'react-bootstrap';
 import { BrowserRouter as Router, NavLink } from 'react-router-dom';
 import CourierDetail from "../containers/CourierDetail.js"
 
@@ -12,86 +12,113 @@ const StatusBar = props => {
   const handleShow = () => setShow(true);
 
 	return (
-		<div id="status-bar">
-			<h3 className='title'>StatusBar</h3>
-			<Accordion defaultActiveKey={'toggleCouriers'}>
-				<Accordion.Toggle
-					as={'h4'}
-					className='hover-pointer title'
-					variant={'outline-secondary'}
-					size='sm'
-					eventKey={'toggleCouriers'}
-					block
-					>
-					Active Couriers &#8628;
-				</Accordion.Toggle>
-				<Accordion.Collapse eventKey={'toggleCouriers'}>
-					<ul>
-					{
-						props.couriers.filter(courier => courier.is_active)
-						.sort((a,b) => b.tickets.length - a.tickets.length)
-						.map(courier => {
-
-
-
-							return <li className='hover-pointer' onClick={handleShow}>{courier.full_name}</li>
-							}
-						)
-					}
-					</ul>
-				</Accordion.Collapse>
-				<h4>Active Clients</h4>
-					<ul>
-					{
-						props.clients.map(client => (
-							<li>
-								<Accordion.Toggle as={Button} variant={'link'} eventKey={`client${client.id}`}>
-									{client.name} ({client.tickets.length})
-								</Accordion.Toggle>
-								<Accordion.Collapse eventKey={`client${client.id}`}>
-									<ul>
-										{
-											client.tickets.map(ticket => <li>Ticket #{ticket.id}</li>)
-										}
-									</ul>
-								</Accordion.Collapse>
-							</li>))
-					}
-					</ul>
-			</Accordion>
-
-				{/* Modal displaying Courier information */}
-
-				<Modal show={show} onHide={handleClose} size="lg">
-
-					<Modal.Header closeButton>
-						<Modal.Title>Detailed Information</Modal.Title>
-					</Modal.Header>
-
-					<Modal.Body>
-						<h3>Courier Info {selectedCourier.name || 'meow'}</h3>
-					</Modal.Body>
-
-					<Modal.Footer>
-						<Button
-							variant={'outline-warning'}
-							onClick={() => alert('Not Implemented')}
-						>
-							Archive Courier
-						</Button>
-						<Button
+		<Container fluid className='status-bar'>
+			<Col>
+				<Accordion defaultActiveKey={'toggleCouriers'}>
+					<Row>
+						<Accordion.Toggle
+							as={'h4'}
+							className='hover-pointer title'
 							variant={'outline-secondary'}
-							onClick={handleClose}
-						>
-								Close
-						</Button>
-					</Modal.Footer>
-				</Modal>
+							size='sm'
+							eventKey={'toggleCouriers'}
+							block
+							>
+							Active Couriers &#8628;
+						</Accordion.Toggle>
+						<Accordion.Collapse eventKey={'toggleCouriers'}>
+							<Table hover striped>
+								<tr className='text-center'>
+									<th>Name</th>
+									<th>Incomplete Tickets</th>
+									<th>Tickets Today</th>
+								</tr>
+								<tbody>
+							{
+								props.couriers.filter(courier => courier.is_active)
+								.sort((a,b) => b.incomplete_tickets.length - a.incomplete_tickets.length)
+								.map(courier => {
 
+									return <tr className='text-center'>
+										<td><strong>{courier.full_name}</strong></td>
+										<td><NavLink
 
+											to='/dispatch/tickets'
+											size='lg'
+											variant='outline-info'
+											onClick={() => props.incompleteCourierTickets(courier.id)}
+										>
 
+											<Badge pill variant='warning' size='lg'> {courier.incomplete_tickets.length}</Badge>
 
-		</div>
+										</NavLink></td>
+
+										<td><NavLink
+											to='/dispatch/tickets'
+											size='lg'
+											variant='outline-info'
+											onClick={() => props.courierTicketsToday(courier.id)}
+										>
+
+											<Badge pill variant='success' size='lg'> {courier.tickets_today.length}</Badge>
+
+										</NavLink></td>
+									</tr>
+									}
+								)
+							}
+							</tbody>
+						</Table>
+						</Accordion.Collapse>
+					</Row>
+					<Row>
+						<Accordion.Toggle
+							as={'h4'}
+							className='hover-pointer title'
+							variant={'outline-secondary'}
+							size='sm'
+							eventKey={'toggleClients'}
+							block
+							>
+							Clients With Incomplete Tickets &#8628;
+						</Accordion.Toggle>
+						<Accordion.Collapse eventKey={'toggleClients'}>
+							<Table hover striped>
+								<tr className='text-center'>
+									<th>Name</th>
+									<th>Incomplete Tickets</th>
+									<th>Tickets Today</th>
+								</tr>
+								<tbody>
+							{
+								props.clients.filter(client => client.incomplete_tickets.length > 0)
+								.sort((a,b) => b.incomplete_tickets.length - a.incomplete_tickets.length)
+								.map(client => {
+									return <tr className='text-center'>
+										<td><strong>{client.name}</strong></td>
+										<td><NavLink
+											to='/dispatch/tickets'
+											onClick={() => props.clientTickets(client.id)}
+										>
+											<Badge pill variant='warning' size='lg'> {client.incomplete_tickets.length}</Badge>
+										</NavLink></td>
+										<td><NavLink
+											to='/dispatch/tickets'
+											onClick={() => props.clientTickets(client.id)}
+										>
+											<Badge pill variant='success' size='lg'> {client.incomplete_tickets.length}</Badge>
+										</NavLink></td>
+									</tr>
+									}
+								)
+							}
+							</tbody>
+						</Table>
+						</Accordion.Collapse>
+					</Row>
+				</Accordion>
+			</Col>
+		</Container>
 	)
 }
 

@@ -1,3 +1,47 @@
+.logo {
+	font-family: 'arial black';
+	font-size: 4rem;
+	color: #383838
+}
+
+.logo:hover {
+	cursor: pointer;
+	text-shadow: 2px 4px 4px #999
+}
+
+.sub-heading {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'arial black';
+	font-size: 2rem;
+	color: #383838
+}
+
+.status-bar {
+	position: sticky;
+	top: 20px;
+	margin: 20px;
+	margin-top: 75px;
+	border: 1px solid black;
+	border-radius: 20px;
+}
+
+.sub-sub-heading {
+	text-align: center;
+	padding:10px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'arial black';
+	font-size: 1rem;
+	color: #383838
+}
+.content-main {
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #fff;
+}
+
 .bordered {
 	border: 1px solid black
 }
@@ -16,33 +60,7 @@
 	text-align: center;
 }
 
-.App {
-  text-align: center;
-  display: grid;
-  grid-template-rows: 5rem auto 5rem;
-  grid-template-columns: 20rem auto 10rem;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+div {
+	padding: 5px;
+	margin: 5px
 }

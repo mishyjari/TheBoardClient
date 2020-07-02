@@ -9,7 +9,21 @@ class NewCourier extends React.Component {
     phone: null,
     radio_number: null,
     is_active: false,
-    is_archived: false
+    is_archived: false,
+    formValid: false
+  };
+
+  resetForm = () => {
+    this.setState({
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone: '',
+      radio_number: '',
+      is_active: false,
+      is_archived: false,
+      formValid: false
+    })
   }
 
   componentWillMount() {
@@ -24,21 +38,25 @@ class NewCourier extends React.Component {
     const key = e.target.name;
     const val = e.target.value;
 
-    e.target.isValid = true
-
-    this.setState({ [key]: val })
+    this.setState({
+      [key]: val,
+      formValid: this.props.courier ? true : document.getElementById('newCourierForm').checkValidity()
+   })
   }
 
   handleSubmit = e => {
     e.preventDefault();
-
-    if (this.props.courier){
-      this.props.handleSubmit(this.state)
-      this.props.handleClose()
-    } else {
-      this.props.handleSubmit(this.state)
-    }
-    document.getElementById('newCourierToggle').className='collapse'
+    if ( this.state.formValid )
+      {
+        if (this.props.courier){
+          this.props.handleSubmit(this.state)
+          this.props.handleClose()
+        } else {
+          this.props.handleSubmit(this.state);
+          this.resetForm()
+        }
+        document.getElementById('newCourierToggle').className='collapse';
+      }
   }
 
   render() {
@@ -53,12 +71,14 @@ class NewCourier extends React.Component {
         }
         <Form
           onChange={this.handleChange}
-          validation
+          id='newCourierForm'
+
         >
           <Form.Row>
             <Form.Group as={Col} controlId={'courierFirstName'}>
               <Form.Label>First Name</Form.Label>
               <Form.Control
+                required
                 type='text'
                 name='first_name'
                 value={this.state.first_name}
@@ -67,6 +87,7 @@ class NewCourier extends React.Component {
             <Form.Group as={Col} controlId={'courierLastName'}>
               <Form.Label>Last Name</Form.Label>
               <Form.Control
+                required
                 type='text'
                 name='last_name'
                 value={this.state.last_name}
@@ -77,6 +98,7 @@ class NewCourier extends React.Component {
             <Form.Group as={Col} controlId={'courierPhone'}>
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
+                required
                 type='tel'
                 name='phone'
                 value={this.state.phone}
@@ -85,6 +107,7 @@ class NewCourier extends React.Component {
             <Form.Group as={Col} controlId={'courierEmail'}>
               <Form.Label>Email Address</Form.Label>
               <Form.Control
+                required
                 type='email'
                 name='email'
                 value={this.state.email}
@@ -93,6 +116,7 @@ class NewCourier extends React.Component {
             <Form.Group as={Col} controlId={'courierRadio'}>
               <Form.Label>Radio Number</Form.Label>
               <Form.Control
+                required
                 type='number'
                 name='radio_number'
                 value={this.state.radio_number} />
@@ -100,12 +124,18 @@ class NewCourier extends React.Component {
           </Form.Row>
           <Form.Row>
             <Form.Group>
-              <Button
-                type="submit"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </Button>
+              {
+                this.state.formValid
+                ?
+                  <Button
+                    type="submit"
+                    onClick={this.handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                :
+                  <Button disabled variant='secondary'>Submit</Button>
+              }
             </Form.Group>
           </Form.Row>
         </Form>
