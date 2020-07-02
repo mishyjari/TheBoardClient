@@ -22,8 +22,8 @@
 	position: sticky;
 	top: 20px;
 	margin: 20px;
-	margin-top: 75px;
-	border: 1px solid black;
+	margin-top: 40px;
+	border: 1px solid #c0c0c0;
 	border-radius: 20px;
 }
 
@@ -37,13 +37,13 @@
 	color: #383838
 }
 .content-main {
-	border: 1px solid black;
+	box-shadow: inset 1px 2px 4px  #C0C0C0 ;
 	border-radius: 10px;
 	background-color: #fff;
 }
 
 .bordered {
-	border: 1px solid black
+	border: 1px solid #8c8c8c;
 }
 
 .styled-link {
@@ -60,7 +60,35 @@
 	text-align: center;
 }
 
-div {
-	padding: 5px;
-	margin: 5px
+div.ticketPreview {
+	margin-bottom: 10px;
+	box-shadow: 2px 2px 4px #8c8c8c;
+}
+
+div.ticketPreview:hover {
+	margin-bottom: 10px;
+	box-shadow: 0 1px 2px 2px #8c8c8c;
+	border: 1px solid #8c8c8c;
+}
+
+.nav-tabs .active {
+	box-shadow: 2px 1px 4px #C0C0C0;
+	border: 1px solid #C0C0C0;
+}
+
+#search-toggle-btn, #new-ticket-btn, #new-client-toggle, #new-courier-toggle, #search-invoice, #newInvoice{
+	box-shadow: 2px 1px 4px #C0C0C0;
+	border: 0;
+}
+
+.list-main {
+	border: 1px solid #000;
+	border-style: solid;
+	border-top-color: #c0c0c0;
+	border-radius: 20px;
+	border-image: linear-gradient(
+      to bottom,
+      #c0c0c0,
+      rgba(0, 0, 0, 0)
+    ) 2 10%;
 }

@@ -11,9 +11,12 @@ class TicketList extends React.Component {
 
 	render() {
 		return (
-			<Container fluid className='content-main'>
-				
+			<Container fluid className='list-main'>
+
 				<Accordion>
+					<Row>
+						<h4 className='sub-sub-heading'>Displaying {this.props.ticketFilterTitle}</h4>
+					</Row>
 				<Row>
 					<Col>
 							{/* New ticket toggle */}
@@ -21,6 +24,8 @@ class TicketList extends React.Component {
 								as={Button}
 								variant={'outline-dark'}
 								eventKey={'newTicket'}
+								id={'new-ticket-btn'}
+								className='form-toggle-btn'
 								block
 							>
 								New Ticket
@@ -45,6 +50,8 @@ class TicketList extends React.Component {
 								as={Button}
 								variant='outline-dark'
 								eventKey={'searchToggle'}
+								id={'search-toggle-btn'}
+								className='form-toggle-btn'
 								block
 							>
 								Filters and Search
@@ -70,9 +77,6 @@ class TicketList extends React.Component {
 								</Col>
 							</Accordion.Collapse>
 						</Col>
-					</Row>
-					<Row>
-						<h4 className='sub-sub-heading'>Displaying {this.props.ticketFilterTitle}</h4>
 					</Row>
 					<Row>
 						<Col>

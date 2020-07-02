@@ -92,7 +92,7 @@ class Invoices extends React.Component {
   render() {
 
     return (
-      <Container fluid>
+      <Container fluid className='list-main'>
           <Accordion>
             <Row>
               <Col>
@@ -115,7 +115,7 @@ class Invoices extends React.Component {
 
               <Col>
                 <Dropdown>
-                  <Dropdown.Toggle block variant={'outline-dark'}>
+                  <Dropdown.Toggle block variant={'outline-secondary'} id={'search-invoice-toggle'}>
                     Show Invoices By Client
                   </Dropdown.Toggle>
                   <Dropdown.Menu>

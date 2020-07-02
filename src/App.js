@@ -4,8 +4,8 @@ import CourierHome from './components/CourierHome.js';
 import ClientHome from './components/ClientHome.js';
 import PublicHome from './components/PublicHome.js';
 import './stylesheets/App.css';
-import { Container, Row, Col, NavLink } from 'react-bootstrap';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { USERS_API } from './_helpers/Apis.js'
 import { Redirect } from 'react-router-dom';
 

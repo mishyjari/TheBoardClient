@@ -47,7 +47,7 @@ class ClientList extends React.Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid className='list-main'>
         <Row>
           <Col sm='3'>
             <Form.Control
@@ -64,6 +64,7 @@ class ClientList extends React.Component {
                 as={Button}
                 variant={'outline-dark'}
                 eventKey={'newClient'}
+                id='new-client-toggle'
                 block
               >
                 New Client

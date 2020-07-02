@@ -488,7 +488,7 @@ class DispatchHome extends React.Component {
 								<Route path='/dispatch/invoices'>
 									<Invoices clients={this.state.clients} />
 								</Route>
-
+-
 								<Route path='/dispatch/new-user'>
 									<NewUser admin={true} />
 								</Route>

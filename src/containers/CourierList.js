@@ -50,7 +50,7 @@ class CourierList extends React.Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid className='list-main'>
         <Row>
           <Col sm='3'>
             <Form.Control
@@ -67,6 +67,7 @@ class CourierList extends React.Component {
                   as={Button}
                   variant={'outline-dark'}
                   eventKey={'newCourier'}
+                  id='new-courier-toggle'
                   block
                 >
                   New Courier

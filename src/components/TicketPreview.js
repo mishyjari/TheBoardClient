@@ -30,7 +30,7 @@ const TicketPreview = props => {
     if ( is_complete && !pod ) { return 'warning' }
     else if ( is_complete ) { return 'success' }
     else if ( !courier_id ) { return 'primary' }
-    else { return 'dark' }
+    else { return 'light' }
   }
 
   const QuickAssign = () => {
@@ -39,7 +39,7 @@ const TicketPreview = props => {
         {
           courier_id && couriers.length > 0
           ?
-            <h5>{couriers.find(c => c.id == courier_id).full_name}</h5>
+            <strong>{couriers.find(c => c.id == courier_id).full_name}</strong>
           :
             <DropdownButton
               id='assignToCourier'
@@ -62,16 +62,16 @@ const TicketPreview = props => {
     )
   }
   return (
-    <Card border={borderStyle()} >
+    <Card border={borderStyle()} className='ticketPreview' >
       <Card.Header>
         <Card.Title
           as="h6"
         >
-          #{id} | <strong>Ordered:</strong>
+          #{id} | <strong>Ordered: </strong>
           {moment(created_at).format('ddd, MMM Do YYYY, LT ')}
         </Card.Title>
         <Card.Text>
-          <Table bordered hover striped size='sm'>
+          <Table bordered hover striped size='sm' className='text-center'>
             <tr>
               <th>Client</th>
               <th>Pickup Address</th>
@@ -85,23 +85,23 @@ const TicketPreview = props => {
             <tbody>
               <tr>
                 <td>
-                  <h6>{
+                  <strong>{
                     client_id && clients.length > 0
                     ?
                       clients.find(c => c.id == client_id).name
                     :
                       "Guest Account"
-                  }</h6>
+                  }</strong>
                 </td>
                 <td>{pickup}</td>
                 <td>{dropoff}</td>
                 <td>
-                  {moment(time_due).format('dddd, MMM Do \'YY')}
+                  {moment(time_due).format('L')}
                   <br />
                   {moment(time_due).format('LT')}
                 </td>
                 <td>
-                  {moment(time_ready).format('dddd, MMM Do \'YY')}
+                  {moment(time_ready).format('L')}
                   <br />
                   {moment(time_ready).format('LT')}
                 </td>
