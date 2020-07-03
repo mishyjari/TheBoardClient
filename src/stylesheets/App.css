@@ -92,3 +92,8 @@ div.ticketPreview:hover {
       rgba(0, 0, 0, 0)
     ) 2 10%;
 }
+
+#ticketPagination {
+	margin-left: auto;
+	margin-right: auto
+}

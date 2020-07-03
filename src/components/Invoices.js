@@ -142,7 +142,7 @@ class Invoices extends React.Component {
                 ?
                   <Table striped hover>
                     <h4 className='sub-sub-heading text-center'>{this.state.selectedClient}</h4>
-                    <tr>
+                    <tr className='text-center'>
                       <th>Invoice Created</th>
                       <th>Client Name</th>
                       <th>Start Date</th>

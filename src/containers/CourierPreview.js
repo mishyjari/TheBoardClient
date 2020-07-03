@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button, Table, Tooltip, Accordion, Row, Container, Col } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import CourierDetail from "./CourierDetail.js";
 import NewCourier from "../components/NewCourier.js";
 
@@ -16,6 +17,8 @@ const CourierPreview = props => {
     courier.is_archived = !is_archived;
     courier.is_active = false;
     props.updateCourier(courier)
+    handleClose();
+
   }
 
 
@@ -28,7 +31,11 @@ const CourierPreview = props => {
           ?
             <em>{full_name} (archived)</em>
           :
-            <strong>{full_name}</strong>
+            <NavLink to={`/dispatch/couriers/${id}`}>
+              <strong>
+                {full_name}
+              </strong>
+            </NavLink>
         }
       </td>
       <td>

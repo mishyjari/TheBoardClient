@@ -1,7 +1,9 @@
 import React from 'react';
 import ClientPreview from './ClientPreview.js';
-import NewClient from '../components/NewClient.js'
+import NewClient from '../components/NewClient.js';
+import ClientShow from '../components/ClientShow.js';
 import { Table, Accordion, Button, Container, Row, Col, Form } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 
 class ClientList extends React.Component {
 
@@ -9,11 +11,8 @@ class ClientList extends React.Component {
     filter: '',
     colSort: 'name',
     sortOrderDesc: false,
-    selectedTicket: null
-  }
-
-  handleShowEditForm = e => {
-
+    selectedTicket: null,
+    showArchived: false,
   }
 
   handleFilter = e => {
@@ -30,7 +29,7 @@ class ClientList extends React.Component {
           || address.toLowerCase().includes(filter)
           || contact_phone.includes(filter)
           || contact_person.toLowerCase().includes(filter)
-      })
+      }, this.state.showArchived)
     })
   }
 
@@ -48,52 +47,70 @@ class ClientList extends React.Component {
   render() {
     return (
       <Container fluid className='list-main'>
-        <Row>
-          <Col sm='3'>
-            <Form.Control
-              type='text'
-              name='filterClients'
-              placeholder='Filter Clients'
-              value={this.state.filter}
-              onChange={this.handleFilter}
-            />
-          </Col>
-          <Col>
-            <Accordion>
-              <Accordion.Toggle
-                as={Button}
-                variant={'outline-dark'}
-                eventKey={'newClient'}
-                id='new-client-toggle'
-                block
-              >
-                New Client
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey={'newClient'} id={'newCourierToggle'}>
-                <NewClient handleNewClient={this.props.newClient} clients={this.props.clients}/>
-              </Accordion.Collapse>
-            </Accordion>
-          </Col>
-        </Row>
-        <Table hover striped>
-          <tr>
-            <th className='hover-pointer' onClick={() => this.handleSort('name')}>Name</th>
-            <th className='hover-pointer' onClick={() => this.handleSort('address')}>Address</th>
-            <th className='hover-pointer' onClick={() => this.handleSort('contact_phone')}>Phone</th>
-            <th className='hover-pointer' onClick={() => this.handleSort('contact_person')}>Contact Person</th>
-            <th></th>
-          </tr>
-          <tbody>
-          {
-            this.props.filteredClients.map(client => <ClientPreview
-              client={client}
-              handleEdit={this.props.editClient}
-              handleDelete={this.props.deleteClient}
-            />)
-          }
-          </tbody>
-        </Table>
 
+        <Route exact path='/dispatch/clients/:id' render={routerProps => <ClientShow
+          {...routerProps} />
+        } />
+
+        <Route exact path='/dispatch/clients'>
+          <Row>
+            <Col sm='3'>
+              <Form.Control
+                type='text'
+                name='filterClients'
+                placeholder='Filter Clients'
+                value={this.state.filter}
+                onChange={this.handleFilter}
+              />
+            </Col>
+            <Col>
+              <Accordion>
+                <Accordion.Toggle
+                  as={Button}
+                  variant={'outline-dark'}
+                  eventKey={'newClient'}
+                  id='new-client-toggle'
+                  block
+                >
+                  New Client
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey={'newClient'} id={'newCourierToggle'}>
+                  <NewClient handleNewClient={this.props.newClient} clients={this.props.clients}/>
+                </Accordion.Collapse>
+              </Accordion>
+            </Col>
+          </Row>
+          <Row>
+            <Form.Check
+              type='switch'
+              label='Include Archived Clients'
+              name='showArchivedClients'
+              id='showArchiveClientsToggle'
+              checked={this.state.showArchived}
+              onChange={() => this.setState(prevState => ({
+                showArchived: !prevState.showArchived}),
+                () => this.props.toggleShowArchived(this.state.showArchived))}
+            />
+          </Row>
+          <Table hover striped>
+            <tr>
+              <th className='hover-pointer' onClick={() => this.handleSort('name')}>Name</th>
+              <th className='hover-pointer' onClick={() => this.handleSort('address')}>Address</th>
+              <th className='hover-pointer' onClick={() => this.handleSort('contact_phone')}>Phone</th>
+              <th className='hover-pointer' onClick={() => this.handleSort('contact_person')}>Contact Person</th>
+              <th></th>
+            </tr>
+            <tbody>
+            {
+              this.props.filteredClients.map(client => <ClientPreview
+                client={client}
+                handleEdit={this.props.editClient}
+                handleDelete={this.props.deleteClient}
+              />)
+            }
+            </tbody>
+          </Table>
+        </Route>
       </Container>
     )
   }

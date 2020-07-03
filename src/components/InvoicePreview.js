@@ -20,13 +20,13 @@ const InvoicePreview = props => {
   }
 
   return (
-    <tr>
+    <tr className='text-center'>
       <td>{moment(invoice.created_at).format('L, LT')}</td>
       <td>{invoice.client.name}</td>
       <td>{moment(invoice.start_date).format('L')}</td>
       <td>{moment(invoice.end_date).format('L')}</td>
-      <td>{invoice.tickets.length}</td>
       <td>${balance}</td>
+      <td>{invoice.tickets.length}</td>
       <td>{invoice.paid ? <em>Paid</em> : <strong>UNPAID</strong>}</td>
       <td>
         <Button

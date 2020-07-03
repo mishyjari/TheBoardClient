@@ -78,7 +78,7 @@ class App extends React.Component {
 
 
     		<div id="footer">
-    			<h6>Blah Blah Blah</h6>
+    			<h6>React App by Michelle Frattaroli</h6>
     		</div>
       </Router>
     </Container>

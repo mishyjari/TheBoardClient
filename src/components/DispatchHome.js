@@ -9,6 +9,7 @@ import SearchForm from './SearchForm.js';
 import NewUser from './NewUser.js';
 import Invoices from './Invoices.js';
 import moment from 'moment';
+import Pagination from 'react-js-pagination';
 import { Container, Row, Col, Tab, Tabs, Nav, Button, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom';
 import { TICKETS_API,
@@ -24,14 +25,15 @@ class DispatchHome extends React.Component {
 
 	state = {
 		clients: [],
+		filteredClients: [],
 		couriers: [],
 		ticketsToday: [],
-		filteredClients: [],
 		filteredCouriers: [],
-		ticketSearchResults: [],
+		ticketSearchResultCount: null,
 		ticketsLoaded: false,
 		filteredTickets: [],
-		ticketFilterTitle: 'Incomplete and Unassigned Tickets'
+		ticketFilterTitle: 'Incomplete and Unassigned Tickets',
+		prevQuery: ''
 	};
 
 	/* INITIAL FETCH - Set state for all clients, all couriers, and select tickets*/
@@ -46,6 +48,8 @@ class DispatchHome extends React.Component {
 			clients: clients,
 			// Sort filter by name
 			filteredClients: clients.sort((a,b) => (b.name < a.name ? 1 : -1))
+				.filter(c => !c.is_archived),
+			prevQuery: CLIENTS_API
 		}))
 	}
 
@@ -57,7 +61,8 @@ class DispatchHome extends React.Component {
 		.then( couriers => this.setState({
 			couriers: couriers,
 			// set filter by first_name
-			filteredCouriers: couriers.filter(c => !c.is_archived).sort((a,b) => (b.first_name < b.first_name ? 1 : -1))
+			filteredCouriers: couriers.sort((a,b) => (b.first_name < b.first_name ? 1 : -1))
+				.filter(c => !c.is_archived)
 		 }))
 	}
 
@@ -185,7 +190,9 @@ class DispatchHome extends React.Component {
 		this.setState({ selectedTicket: ticket })
 	}
 
-	handleSearch = data => {
+	handleSearch = (data, page) => {
+		page = page ? page : 1
+
 		const courier = this.state.couriers.find(c => c.full_name === data.courierName)
 		const client = this.state.clients.find(cl => cl.name === data.clientName)
 
@@ -195,11 +202,12 @@ class DispatchHome extends React.Component {
 		if ( client ) { query += `&client_id=${client.id}` }
 
 		//alert(JSON.stringify(searchData, null, 4))
-		fetch(query)
+		fetch(query + `&page=${page}`)
 			.then( res => res.json() )
 			.then( tickets => this.setState({
-				filteredTickets: tickets,
-				ticketFilterTitle: 'Search Results'
+				filteredTickets: tickets.tickets,
+				ticketSearchResultCount: tickets.count,
+				ticketFilterTitle: `${tickets.count} Search Results`
 			}))
 	}
 
@@ -231,14 +239,14 @@ class DispatchHome extends React.Component {
 
 	toggleShowArchivedCouriers = show => {
 		if ( show ) {
-			this.setState(prevState => ({ filteredCouriers: prevState.couriers.sort((a,b) => (b.name < a.name ? 1 : -1)) }))
+			this.setState(prevState => ({ filteredCouriers: prevState.couriers.sort((a,b) => (b.first_name < a.first_name ? 1 : -1)) }))
 		}
 		else {
 			this.setState(prevState => ({ filteredCouriers: prevState.couriers.filter(c => !c.is_archived).sort((a,b) => (b.name < a.name ? 1 : -1)) }))
 		}
 	}
 
-	handleSortCouriers = (col,isDesc) => {
+	handleSortCouriers = (col, isDesc ) => {
 		const filteredCouriers = [...this.state.filteredCouriers].sort((a,b) => {
 			return !isDesc ? b[col] < a[col] : a[col] < b[col]
 		})
@@ -246,7 +254,7 @@ class DispatchHome extends React.Component {
 	}
 
 
-	handleUpdateCourier = courierData => {
+	handleUpdateCourier = (courierData, callback) => {
 		fetch(`${COURIERS_API}/${courierData.id}`, {
 			method: "PATCH",
 			headers: HEADERS,
@@ -262,8 +270,8 @@ class DispatchHome extends React.Component {
 
 			this.setState({
 				couriers: couriers,
-				filteredCouriers: couriers.filter(c => !c.is_archived).sort((a,b) => (b.name < a.name ? 1 : -1)) })
-			})
+				filteredCouriers: couriers.filter(c => !c.is_archived).sort((a,b) => (b.first_name < a.first_name ? 1 : -1)) })
+			}, callback)
 		}
 
 	handleNewCourier = courierData => {
@@ -282,8 +290,13 @@ class DispatchHome extends React.Component {
 		))
 	}
 
-	handleFilterCouriers = filter => {
-		this.setState(prevState => ({ filteredCouriers: prevState.couriers.filter(filter) }))
+	handleFilterCouriers = (filter, showArchived) => {
+		if ( showArchived ) {
+			this.setState(prevState => ({ filteredCouriers: prevState.couriers.filter(filter) }))
+		} else {
+			this.setState(prevState => ({ filteredCouriers: prevState.couriers.filter(filter)
+			 	.filter(c => !c.is_archived )}))
+		}
 	}
 
 
@@ -310,6 +323,15 @@ class DispatchHome extends React.Component {
 
 	/* ==================== CLIENT FUNCTIONS ====================== */
 
+	toggleShowArchivedClients = show => {
+		if ( show ) {
+			this.setState(prevState => ({ filteredClients: prevState.clients.sort((a,b) => (b.name < a.name ? 1 : -1)) }))
+		}
+		else {
+			this.setState(prevState => ({ filteredClients: prevState.clients.filter(c => !c.is_archived).sort((a,b) => (b.name < a.name ? 1 : -1)) }))
+		}
+	}
+
 	handleSortClients = (col,isDesc) => {
 		const filteredClients = [...this.state.filteredClients].sort((a,b) => {
 			return isDesc ? b[col] < a[col] : a[col] < b[col]
@@ -333,7 +355,7 @@ class DispatchHome extends React.Component {
 
 			this.setState({
 				clients: clients,
-				filteredClients: clients
+				filteredClients: clients.filter(c => !c.is_archived)
 			})
 		})
 	}
@@ -350,13 +372,17 @@ class DispatchHome extends React.Component {
 			filteredWithNewClient.unshift(client)
 			this.setState(prevState => ({
 				clients: [...prevState.clients, client],
-				filteredClients: filteredWithNewClient
+				filteredClients: filteredWithNewClient.filter(c => !c.is_archived)
 			}))
 		})
 	}
 
-	handleFilterClients = filter => {
-		this.setState(prevState => ({ filteredClients: prevState.clients.filter(filter) }))
+	handleFilterClients = (filter, showArchived) => {
+		if ( showArchived ){
+			this.setState(prevState => ({ filteredClients: prevState.clients.filter(filter) }))
+		} else {
+			this.setState(prevState => ({ filteredClients: prevState.clients.filter(filter).filter(c => !c.is_archived) }))
+		}
 	}
 
 
@@ -375,7 +401,7 @@ class DispatchHome extends React.Component {
 
 			this.setState({
 				clients: clients,
-				filteredClients: clients
+				filteredClients: clients.filter(c => !c.is_archived)
 			})
 		})
 	}
@@ -446,7 +472,7 @@ class DispatchHome extends React.Component {
 								<Route path='/dispatch/tickets'>
 									<TicketList
 										tickets={this.state.filteredTickets}
-										searchRes={this.state.ticketSearchResults}
+
 										ticketFilterTitle={this.state.ticketFilterTitle}
 										clients={this.state.clients}
 										couriers={this.state.couriers}
@@ -458,6 +484,9 @@ class DispatchHome extends React.Component {
 										filterTickets={this.handleFilterTickets}
 										search={this.handleSearch}
 										handlePageChange={this.fetchTicketPage}
+										prevQuery={this.state.prevQuery}
+										ticketSearchResultCount={this.state.ticketSearchResultCount}
+
 										 />
 								</Route>
 
@@ -470,6 +499,7 @@ class DispatchHome extends React.Component {
 										editClient={this.handleUpdateClient}
 										newClient={this.handleNewClient}
 										deleteClient={this.handleDeleteClient}
+										toggleShowArchived={this.toggleShowArchivedClients}
 									/>
 								</Route>
 
@@ -488,7 +518,7 @@ class DispatchHome extends React.Component {
 								<Route path='/dispatch/invoices'>
 									<Invoices clients={this.state.clients} />
 								</Route>
--
+								
 								<Route path='/dispatch/new-user'>
 									<NewUser admin={true} />
 								</Route>

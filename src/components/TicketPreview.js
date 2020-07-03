@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
 import { Accordion, Button, Card, Table, Row, Col, Modal, Dropdown, DropdownButton } from 'react-bootstrap';
 import TicketDetail from './TicketDetail.js';
 import NewTicket from './NewTicket.js';
@@ -39,7 +39,11 @@ const TicketPreview = props => {
         {
           courier_id && couriers.length > 0
           ?
-            <strong>{couriers.find(c => c.id == courier_id).full_name}</strong>
+            <NavLink to={`/dispatch/couriers/${courier_id}`}>
+              <strong>
+                {couriers.find(c => c.id == courier_id).full_name}
+              </strong>
+            </NavLink>
           :
             <DropdownButton
               id='assignToCourier'
@@ -67,7 +71,10 @@ const TicketPreview = props => {
         <Card.Title
           as="h6"
         >
-          #{id} | <strong>Ordered: </strong>
+          <NavLink to={`/dispatch/tickets/${id}`}>
+          #{id}
+          </NavLink>
+          <strong> | Ordered: </strong>
           {moment(created_at).format('ddd, MMM Do YYYY, LT ')}
         </Card.Title>
         <Card.Text>
@@ -86,9 +93,11 @@ const TicketPreview = props => {
               <tr>
                 <td>
                   <strong>{
-                    client_id && clients.length > 0
+                      clients.find(c => c.id == client_id)
                     ?
-                      clients.find(c => c.id == client_id).name
+                      <NavLink to={`/dispatch/clients/${client_id}`}>
+                        {clients.find(c => c.id == client_id).name}
+                      </NavLink>
                     :
                       "Guest Account"
                   }</strong>

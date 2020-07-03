@@ -20,12 +20,14 @@ TICKET BOARD
   - SEARCH
     - Makes a new fetch to the back-end given courier, client and/or time frame
 - TODOS:
-  - Pagination
+  - Pagination for all results
   - Handle unassigned but completed tickets better - maybe hide them by default unless retrieved in search
   - Better address fields for tickets, store as json string
   - Cleaner display for ticket preview
   - Validation and additional fields for new / edit ticket forms
   - More search options
+  - Filters should work on search!!
+  - BUG - Pagination persists after search results have been navigated away from
 
 CLIENTS BOARD
 - Shows all clients in simple table.
@@ -45,7 +47,8 @@ COURIERS BOARD
   - BUG - Toggling courier back to 'active' throws an association error
   - BUG - Toggling courier's active status resets sort
   - BUG - Quick filter unaware of showArchived toggle
-    ** Perhaps move the bool for showArchived to dispatchHome so couriers/filteredCouriers will remain consistent per that value 
+  - BUG - Editing courier, incl. toggling archive or active, resets archived filter (but doesnt toggle switch or state)
+    ** Perhaps move the bool for showArchived to dispatchHome so couriers/filteredCouriers will remain consistent per that value
   - Toggle all active/inactive // toggle all with incomplete tickets to active
   - Pagination
   - Add tickets today column
@@ -73,5 +76,6 @@ TO DO / GENERAL
   - Email / text integration - for dispatching jobs, sending invoices, notifying when job has been completed, etc.
 - Needs pagination everywhere. Courier / client pagination can be done all on the front end. Some combination of front / back should be used for invoices and tickets.  
 - BUG - DateTime instancea are inconsistent per time zone offsets. Best to move all functions responsible for handling date time into a single document. Have everything converted to / from unix epoch when going to / from back end
+- Make UI more responsive, scale to lower resolutions, handle mobile browsers (perhaps a React Native version for mobile devices), Collapsible containers, etc.
 
 DEVELOPED BY Michelle Frattaroli

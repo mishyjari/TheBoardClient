@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button, Table, Accordion, Row, Col, Container } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import NewClient from '../components/NewClient.js';
 
 const ClientPreview = props => {
@@ -11,13 +12,24 @@ const ClientPreview = props => {
   const { client, clients, handleEdit } = props;
 
   const toggleArchive = () => {
-    console.log('archive')
+    const clientData = {...client};
+    clientData.is_archived = !client.is_archived;
+    handleEdit(clientData);
+    handleClose();
   }
 
   return (
     <tr>
       <td>
-        {client.name}
+        {
+          client.is_archived
+          ?
+            <em>{client.name} (archived)</em>
+          :
+            <NavLink to={`/dispatch/clients/${client.id}`}>
+              <strong>{client.name}</strong>
+            </NavLink>
+        }
       </td>
       <td>
         {client.address}
