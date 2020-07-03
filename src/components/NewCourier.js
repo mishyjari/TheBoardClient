@@ -32,6 +32,10 @@ class NewCourier extends React.Component {
     }
   }
 
+  componentDidRecieveProps() {
+    console.log('props')
+  }
+
   handleChange = e => {
     e.persist();
 

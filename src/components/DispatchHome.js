@@ -201,13 +201,18 @@ class DispatchHome extends React.Component {
 		if ( courier ) { query += `&courier_id=${courier.id}` }
 		if ( client ) { query += `&client_id=${client.id}` }
 
+		const filterTitle = courier && client ? `matching client ${client.name} and courier ${courier.full_name}`
+			: courier && !client ? `matching courier ${courier.full_name}`
+			: !courier && client ? `matching client #${client.name}`
+			: ''
+
 		//alert(JSON.stringify(searchData, null, 4))
 		fetch(query + `&page=${page}`)
 			.then( res => res.json() )
 			.then( tickets => this.setState({
 				filteredTickets: tickets.tickets,
 				ticketSearchResultCount: tickets.count,
-				ticketFilterTitle: `${tickets.count} Search Results`
+				ticketFilterTitle: `${tickets.count} Search Results ${filterTitle}`
 			}))
 	}
 
@@ -270,7 +275,9 @@ class DispatchHome extends React.Component {
 
 			this.setState({
 				couriers: couriers,
-				filteredCouriers: couriers.filter(c => !c.is_archived).sort((a,b) => (b.first_name < a.first_name ? 1 : -1)) })
+				filteredCouriers: couriers.filter(
+					c => !c.is_archived)
+					.sort((a,b) => (b.first_name < a.first_name ? 1 : -1)) })
 			}, callback)
 		}
 
@@ -512,13 +519,14 @@ class DispatchHome extends React.Component {
 										deleteCourier={this.handleDeleteCourier}
 										newCourier={this.handleNewCourier}
 										toggleShowArchived={this.toggleShowArchivedCouriers}
+										handleSearch={this.handleSearch}
 										/>
 								</Route>
 
 								<Route path='/dispatch/invoices'>
 									<Invoices clients={this.state.clients} />
 								</Route>
-								
+
 								<Route path='/dispatch/new-user'>
 									<NewUser admin={true} />
 								</Route>

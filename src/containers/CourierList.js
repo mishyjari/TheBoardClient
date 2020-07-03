@@ -51,11 +51,14 @@ class CourierList extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container fluid className='list-main'>
         <Route exact path='/dispatch/couriers/:id' render={routerProps => <CourierShow
-          {...routerProps} />
+          {...routerProps}
+          handleSubmit={this.props.updateCourier}
+          handleSearch={this.props.handleSearch}
+          deleteCourier={this.props.deleteCourier}
+            />
         } />
 
         <Route exact path='/dispatch/couriers'>
