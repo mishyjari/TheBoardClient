@@ -37,7 +37,7 @@ const TicketPreview = props => {
     return (
       <div>
         {
-          courier_id && couriers.length > 0
+          couriers.find(c => c.id == courier_id)
           ?
             <NavLink to={`/dispatch/couriers/${courier_id}`}>
               <strong>

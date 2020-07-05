@@ -32,9 +32,7 @@ class CourierShow extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.handleSubmit(this.state.courier,
-      this.setState(prevState => ({
-        editFields: false
-      }))
+      this.setState({ editFields: false })
     )
   }
 
@@ -48,15 +46,11 @@ class CourierShow extends React.Component {
     })
   }
 
-  fetchCourier = id => {
+  componentWillMount() {
+    const id = this.props.match.params.id
     fetch(COURIERS_API + `/${id}`)
     .then( res => res.json() )
     .then( courier => this.setState({ courier }) )
-  }
-
-  componentWillMount() {
-    const id = this.props.match.params.id
-    this.fetchCourier(id);
   }
 
   handleDelete = () => {

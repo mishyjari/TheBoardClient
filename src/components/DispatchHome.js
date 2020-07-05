@@ -33,7 +33,8 @@ class DispatchHome extends React.Component {
 		ticketsLoaded: false,
 		filteredTickets: [],
 		ticketFilterTitle: 'Incomplete and Unassigned Tickets',
-		prevQuery: ''
+		prevSearch: null,
+		activePage: 1,
 	};
 
 	/* INITIAL FETCH - Set state for all clients, all couriers, and select tickets*/
@@ -191,7 +192,9 @@ class DispatchHome extends React.Component {
 	}
 
 	handleSearch = (data, page) => {
-		page = page ? page : 1
+
+		data = data ? data : this.state.prevSearch;
+		page = page ? page : 1;
 
 		const courier = this.state.couriers.find(c => c.full_name === data.courierName)
 		const client = this.state.clients.find(cl => cl.name === data.clientName)
@@ -203,7 +206,7 @@ class DispatchHome extends React.Component {
 
 		const filterTitle = courier && client ? `matching client ${client.name} and courier ${courier.full_name}`
 			: courier && !client ? `matching courier ${courier.full_name}`
-			: !courier && client ? `matching client #${client.name}`
+			: !courier && client ? `matching client ${client.name}`
 			: ''
 
 		//alert(JSON.stringify(searchData, null, 4))
@@ -212,8 +215,15 @@ class DispatchHome extends React.Component {
 			.then( tickets => this.setState({
 				filteredTickets: tickets.tickets,
 				ticketSearchResultCount: tickets.count,
-				ticketFilterTitle: `${tickets.count} Search Results ${filterTitle}`
+				ticketFilterTitle: `${tickets.count} Search Results ${filterTitle}`,
+				prevSearch: data
 			}))
+	}
+
+	handlePageChange = page => {
+		this.setState({ activePage: page }, () => {
+			this.handleSearch(this.state.prevSearch, this.state.activePage)
+		})
 	}
 
 	showIncompleteCourierTickets = courier_id => {
@@ -346,7 +356,7 @@ class DispatchHome extends React.Component {
 		this.setState(prevState => ({ filteredClients }))
 	}
 
-	handleUpdateClient = data => {
+	handleUpdateClient = (data, callback) => {
 		fetch(`${CLIENTS_API}/${data.id}`, {
 			method: "PATCH",
 			headers: HEADERS,
@@ -363,7 +373,7 @@ class DispatchHome extends React.Component {
 			this.setState({
 				clients: clients,
 				filteredClients: clients.filter(c => !c.is_archived)
-			})
+			}, callback)
 		})
 	}
 
@@ -493,7 +503,8 @@ class DispatchHome extends React.Component {
 										handlePageChange={this.fetchTicketPage}
 										prevQuery={this.state.prevQuery}
 										ticketSearchResultCount={this.state.ticketSearchResultCount}
-
+										handlePageChange={this.handlePageChange}
+										activePage={this.state.activePage}
 										 />
 								</Route>
 
@@ -507,6 +518,7 @@ class DispatchHome extends React.Component {
 										newClient={this.handleNewClient}
 										deleteClient={this.handleDeleteClient}
 										toggleShowArchived={this.toggleShowArchivedClients}
+										handleSearch={this.handleSearch}
 									/>
 								</Route>
 

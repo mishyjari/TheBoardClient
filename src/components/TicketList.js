@@ -13,24 +13,11 @@ import Pagination from 'react-js-pagination';
 class TicketList extends React.Component {
 
 	state = {
-		prevSearch: null,
-		activePage: 1,
-	}
-
-	handleSearch = data => {
-			this.setState({ prevSearch: data }, () => {
-				this.props.search(this.state.prevSearch, this.state.activePage)
-			})
-	}
-
-	handlePageChange = page => {
-		this.setState({ activePage: page }, () => {
-			this.handleSearch(this.state.prevSearch)
-		})
+		totalResults: 0
 	}
 
 	componentDidRecieveProps() {
-		this.setState({ totalResults: this.props.ticketSearchResultCount }, () => console.log(this.state))
+		this.setState({ totalResults: this.props.ticketSearchResultCount })
 	}
 
 	render() {
@@ -51,13 +38,13 @@ class TicketList extends React.Component {
 							{ this.props.ticketSearchResultCount
 							?
 								<Pagination
-									activePage={this.state.activePage}
+									activePage={this.props.activePage}
 									itemClass="page-item"
 									linkClass="page-link"
 									itemsCountPerPage={20}
 									totalItemsCount={this.props.ticketSearchResultCount}
 									pageRangeDisplayed={5}
-									onChange={this.handlePageChange.bind(this)}
+									onChange={this.props.handlePageChange.bind(this)}
 									/>
 								: null
 							}
@@ -120,7 +107,7 @@ class TicketList extends React.Component {
 										couriers={this.props.couriers}
 										clients={this.props.clients}
 										couriers={this.props.couriers}
-										search={this.handleSearch}
+										search={this.props.search}
 									/>
 									</Col>
 								</Accordion.Collapse>
@@ -146,13 +133,13 @@ class TicketList extends React.Component {
 								{ this.props.ticketSearchResultCount
 								?
 									<Pagination
-										activePage={this.state.activePage}
+										activePage={this.props.activePage}
 										itemClass="page-item"
 										linkClass="page-link"
 										itemsCountPerPage={20}
 										totalItemsCount={this.props.ticketSearchResultCount}
 										pageRangeDisplayed={5}
-										onChange={this.handlePageChange.bind(this)}
+										onChange={this.props.handlePageChange.bind(this)}
 										/>
 									: null
 								}

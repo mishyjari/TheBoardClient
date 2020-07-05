@@ -29,6 +29,9 @@ TICKET BOARD
   - Filters should work on search!!
   - BUG - Pagination persists after search results have been navigated away from
 
+TICKET SHOW PAGE
+- In development. Currently renders a Ticket preview card with minimal functionality
+
 CLIENTS BOARD
 - Shows all clients in simple table.
 - Can be sorted up/down by each column
@@ -41,6 +44,9 @@ CLIENTS BOARD
   - Build out more options and validation in new client form
   - Pagination
 
+CLIENT SHOW PAGE
+- In development
+
 COURIERS BOARD
 - Much the same as clients board. Adds toggle to mark courier (in)active (disabled if courier is archived)
 - TODOS
@@ -52,6 +58,12 @@ COURIERS BOARD
   - Toggle all active/inactive // toggle all with incomplete tickets to active
   - Pagination
   - Add tickets today column
+
+COURIER SHOW PAGE
+- Renders a table with courier's data.
+- Toggle switch allows for courier's information to be edited or for courier to be deleted.
+- Button to show all couriers tickets from 1/1/2000 to present.
+  - This just calls the search handler in DispatchHome. There is a bug with pagination. App will crash when navigating to another results page. Issue is with the 'prevSearch' hash held in ticketList's state. Will need to restructure for more versatile searching
 
 INVOICES
 - By Default, displays all unpaid invoices
@@ -75,7 +87,7 @@ TO DO / GENERAL
   - GUEST ORDER FORM - Public. Allow non-users to order delivery as a guest.
   - Email / text integration - for dispatching jobs, sending invoices, notifying when job has been completed, etc.
 - Needs pagination everywhere. Courier / client pagination can be done all on the front end. Some combination of front / back should be used for invoices and tickets.  
-- BUG - DateTime instancea are inconsistent per time zone offsets. Best to move all functions responsible for handling date time into a single document. Have everything converted to / from unix epoch when going to / from back end
+- BUG - DateTime instances are inconsistent per time zone offsets. Best to move all functions responsible for handling date time into a single document. Have everything converted to / from unix epoch when going to / from back end
 - Make UI more responsive, scale to lower resolutions, handle mobile browsers (perhaps a React Native version for mobile devices), Collapsible containers, etc.
 
 DEVELOPED BY Michelle Frattaroli

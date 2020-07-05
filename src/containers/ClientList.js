@@ -49,7 +49,11 @@ class ClientList extends React.Component {
       <Container fluid className='list-main'>
 
         <Route exact path='/dispatch/clients/:id' render={routerProps => <ClientShow
-          {...routerProps} />
+          {...routerProps}
+          handleSubmit={this.props.editClient}
+          handleDelete={this.props.deleteClient}
+          handleSearch={this.props.handleSearch}
+            />
         } />
 
         <Route exact path='/dispatch/clients'>
