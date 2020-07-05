@@ -72,14 +72,18 @@ class ClientList extends React.Component {
                 <Accordion.Toggle
                   as={Button}
                   variant={'outline-dark'}
-                  eventKey={'newClient'}
-                  id='new-client-toggle'
+                  eventKey={'newClientToggle'}
+
                   block
                 >
                   New Client
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey={'newClient'} id={'newCourierToggle'}>
-                  <NewClient handleNewClient={this.props.newClient} clients={this.props.clients}/>
+                <Accordion.Collapse eventKey={'newClientToggle'} id={'newClientToggle'}>
+                  <NewClient
+                    handleNewClient={this.props.newClient}
+                    clients={this.props.clients}
+                    close={() => document.getElementById('newClientToggle').className='collapse'}
+                    />
                 </Accordion.Collapse>
               </Accordion>
             </Col>

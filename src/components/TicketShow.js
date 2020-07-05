@@ -2,7 +2,7 @@ import React from 'react';
 import TicketPreview from './TicketPreview.js';
 import { TICKETS_API } from '../_helpers/Apis.js';
 
-import { Container } from 'react-bootstrap'
+import { Container, Accordion } from 'react-bootstrap'
 
 class TicketShow extends React.Component {
 
@@ -17,17 +17,24 @@ class TicketShow extends React.Component {
     .then( ticket => this.setState({ ticket }))
   }
 
+  handleDelete = id => {
+    this.props.handleDelete(id);
+    this.props.history.push('/dispatch/tickets')
+
+  }
   render() {
     console.log(this.state)
     return (
       <Container fluid>
-        <TicketPreview
-          ticket={this.state.ticket}
-          clients={this.props.clients}
-          couriers={this.props.couriers}
-          handleUpdate={this.props.handleUpdate}
-          handleDelete={this.props.handleDelete}
-        />
+        <Accordion>
+          <TicketPreview
+            ticket={this.state.ticket}
+            clients={this.props.clients}
+            couriers={this.props.couriers}
+            handleUpdate={this.props.handleUpdate}
+            handleDelete={this.handleDelete}
+          />
+        </Accordion>
       </Container>
     )
   }

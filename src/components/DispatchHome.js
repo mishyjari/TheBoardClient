@@ -8,6 +8,7 @@ import NewTicket from './NewTicket.js';
 import SearchForm from './SearchForm.js';
 import NewUser from './NewUser.js';
 import Invoices from './Invoices.js';
+import NewToast from './NewToast.js';
 import moment from 'moment';
 import Pagination from 'react-js-pagination';
 import { Container, Row, Col, Tab, Tabs, Nav, Button, Alert } from 'react-bootstrap';
@@ -35,6 +36,7 @@ class DispatchHome extends React.Component {
 		ticketFilterTitle: 'Incomplete and Unassigned Tickets',
 		prevSearch: null,
 		activePage: 1,
+		toasts: []
 	};
 
 	/* INITIAL FETCH - Set state for all clients, all couriers, and select tickets*/
@@ -106,7 +108,7 @@ class DispatchHome extends React.Component {
 				filteredTickets: [...prevState.filteredTickets, newTicket].sort((a,b) => {
 						return a.created_at < b.created_at ? 1 : -1
 				})
-			})
+			}), () => this.handleNewToast('Success', `Ticket #${newTicket.id} Created!`)
 		)})
 	};
 
@@ -140,7 +142,7 @@ class DispatchHome extends React.Component {
 
 			this.setState({
 				tickets: tickets,
-			 })
+			}, () => this.handleNewToast('Success', `Ticket #${ticket.id} Updated!`))
 		})
 	}
 
@@ -156,7 +158,7 @@ class DispatchHome extends React.Component {
 			const index = tickets.indexOf(deletedTicket);
 			tickets.splice(index,1)
 
-			this.setState({ tickets })
+			this.setState({ tickets }, () => this.handleNewToast('Success', `Ticket #${ticket.id} Deleted!`))
 		})
 	}
 
@@ -165,7 +167,7 @@ class DispatchHome extends React.Component {
 			filteredTickets: prevState.tickets.filter(filter),
 			ticketFilterTitle: heading,
 			ticketSearchResultCount: null
-		}))
+		}), () => this.handleNewToast('Filter Set', `Ticket filter set to ${heading}`))
 	}
 
 	handleSortTickets = (col,isDesc) => {
@@ -182,7 +184,7 @@ class DispatchHome extends React.Component {
 					return isDesc ? a[col] < b[col] : a[col] > b[col]
 				}
 			})
-		}))
+		}), () => this.handleNewToast('Sort Set', `Sorting by property '${col}'`))
 	}
 
 	getTicketById = id => {
@@ -272,7 +274,7 @@ class DispatchHome extends React.Component {
 	}
 
 
-	handleUpdateCourier = (courierData, callback) => {
+	handleUpdateCourier = courierData => {
 		fetch(`${COURIERS_API}/${courierData.id}`, {
 			method: "PATCH",
 			headers: HEADERS,
@@ -290,8 +292,8 @@ class DispatchHome extends React.Component {
 				couriers: couriers,
 				filteredCouriers: couriers.filter(
 					c => !c.is_archived)
-					.sort((a,b) => (b.first_name < a.first_name ? 1 : -1)) })
-			}, callback)
+					.sort((a,b) => (b.first_name < a.first_name ? 1 : -1))
+				}, () => this.handleNewToast('Success', `Courier #${courier.id} Updated!`) )})
 		}
 
 	handleNewCourier = courierData => {
@@ -306,8 +308,8 @@ class DispatchHome extends React.Component {
 			filteredCouriers: [...prevState.filteredCouriers, courier].sort((a,b) => {
 					return a.created_at < b.created_at
 				})
-			})
-		))
+			}
+		), () => this.handleNewToast('Success', `Courier #${courier.id} Created!`)))
 	}
 
 	handleFilterCouriers = (filter, showArchived) => {
@@ -335,7 +337,7 @@ class DispatchHome extends React.Component {
 			this.setState({
 				couriers: couriers,
 				filteredCouriers: couriers
-			})
+			}, () => this.handleNewToast('Success', `Courier #${courier.id} Deleted!`))
 		})
 	}
 
@@ -376,7 +378,7 @@ class DispatchHome extends React.Component {
 			this.setState({
 				clients: clients,
 				filteredClients: clients.filter(c => !c.is_archived)
-			}, callback)
+			}, () => this.handleNewToast('Success', `Client #${client.id} Updated!`))
 		})
 	}
 
@@ -393,7 +395,7 @@ class DispatchHome extends React.Component {
 			this.setState(prevState => ({
 				clients: [...prevState.clients, client],
 				filteredClients: filteredWithNewClient.filter(c => !c.is_archived)
-			}))
+			}), () => this.handleNewToast('Success', `Client #${client.id} Created!`))
 		})
 	}
 
@@ -422,13 +424,50 @@ class DispatchHome extends React.Component {
 			this.setState({
 				clients: clients,
 				filteredClients: clients.filter(c => !c.is_archived)
-			})
+			}, () => this.handleNewToast('Success', `Client #${client.id} Deleted!`))
 		})
+	}
+
+	handleNewToast = (heading, text) => {
+		const handleClose = id => {
+			const toasts = this.state.toasts;
+			toasts.splice(toasts.indexOf(toasts.find(t => t.id == id)), 1)
+			this.setState({ toasts })
+		}
+		const toast = <NewToast
+			id={`toast-${new Date().getTime()}`}
+			heading={heading}
+			text={text}
+			handleClose={handleClose}
+		/>
+		this.setState(prevState => ({ toasts: [...prevState.toasts, toast]}))
 	}
 
 	render() {
 		return (
 			<Container fluid>
+				<Row aria-live="assertive"
+  				aria-atomic="true"
+					id='toast-container'
+  				style={{
+			    position: 'absolute',
+					top: 0,
+					right: 0,
+			    minHeight: '200px',
+			  	}}>
+					<div
+
+			    style={{
+			      position: 'absolute',
+			      top: 0,
+			      right: '30px',
+			    }}
+			  >
+					{
+						this.state.toasts.map(t => t)
+					}
+				</div>
+				</Row>
 				<Row>
 					<Router>
 						<Col>
@@ -540,7 +579,10 @@ class DispatchHome extends React.Component {
 								</Route>
 
 								<Route path='/dispatch/invoices'>
-									<Invoices clients={this.state.clients} />
+									<Invoices
+										clients={this.state.clients}
+										newToast={this.handleNewToast}
+									/>
 								</Route>
 
 								<Route path='/dispatch/new-user'>

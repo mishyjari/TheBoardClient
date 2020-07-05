@@ -27,7 +27,7 @@ const TicketPreview = props => {
   }
 
   const borderStyle = () => {
-    if ( is_complete && !pod ) { return 'warning' }
+    if ( is_complete && !pod ) { return 'danger' }
     else if ( is_complete ) { return 'success' }
     else if ( !courier_id ) { return 'primary' }
     else { return 'warning' }

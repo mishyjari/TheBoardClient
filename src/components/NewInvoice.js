@@ -152,7 +152,6 @@ class NewInvoice extends React.Component {
             <Button variant='secondary' disabled>Select a Client</Button>
           :
             <Button onClick={() => {
-                document.getElementById('newInvoice').className='collapse'
                 this.props.handleSubmit(this.state);
               }
             }

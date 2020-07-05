@@ -26,8 +26,8 @@ class Invoices extends React.Component {
     .then( invoice => {
       const invoices = [...this.state.invoices];
       invoices.unshift(invoice)
-      this.setState({ invoices })
-    }, () => document.getElementById('meow').className='collapse')
+      this.setState({ invoices }, () => this.props.newToast('Success', `Invoice #${invoice.id} Created!`))
+    }, () => document.getElementById('newInvoiceToggle').className='collapse')
   }
 
   handleDelete = id => {
@@ -46,7 +46,7 @@ class Invoices extends React.Component {
       const index = invoices.indexOf(oldInvoice);
       invoices.splice(index,1)
 
-      this.setState({ invoices })
+      this.setState({ invoices }, () => this.props.newToast('Success', `Invoice #${deletedInvoice.id} Deleted!`))
     })
   }
 
@@ -80,7 +80,7 @@ class Invoices extends React.Component {
 
       invoices.splice(index,1,invoice)
 
-      this.setState({ invoices })
+      this.setState({ invoices }, () => this.props.newToast('Success', `Invoice #${invoice.id} Updated!`))
     })
   }
 
@@ -106,12 +106,11 @@ class Invoices extends React.Component {
                   as={Button}
                   variant={'outline-dark'}
                   block
-                  id={'newInvoice'}
-                  eventKey={'newInvoice'}
+                  eventKey={'newInvoiceToggle'}
                 >
                   New Invoice
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey={'newInvoice'}  id='meow'>
+                <Accordion.Collapse eventKey={'newInvoiceToggle'}  id='newInvoiceToggle'>
                   <NewInvoice
                     clients={this.props.clients}
                     handleSubmit={this.handleNewInvoice}

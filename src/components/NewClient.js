@@ -21,7 +21,12 @@ class NewClient extends React.Component {
     {
       if ( this.props.client ){
         this.props.handleEditClient(this.state)
-        this.props.close()
+        this.setState({
+          name: '',
+          address: '',
+          contact_person: '',
+          contact_phone: ''
+        })
       } else {
         this.props.handleNewClient(this.state)
       }
@@ -101,7 +106,11 @@ class NewClient extends React.Component {
             <Form.Row>
               <Button
                 type='submit'
-                onClick={this.handleSubmit}
+                onClick={e => {
+                  this.handleSubmit(e);
+                  this.props.close()
+                }
+                }
               >
                 Submit
               </Button>

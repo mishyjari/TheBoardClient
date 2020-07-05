@@ -5888,6 +5888,7 @@ a.close.disabled {
   backdrop-filter: blur(10px);
   opacity: 0;
   border-radius: 0.25rem;
+  z-index: 999999 !default;
 }
 
 .toast:not(:last-child) {
@@ -5899,7 +5900,7 @@ a.close.disabled {
 }
 
 .toast.show {
-  display: block;
+  display: absolute;
   opacity: 1;
 }
 
