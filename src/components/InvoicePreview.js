@@ -11,7 +11,7 @@ const InvoicePreview = props => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { invoice, balance } = props;
+  const { invoice } = props;
 
   const togglePaid = () => {
     const newTicket = {...invoice}
@@ -25,7 +25,22 @@ const InvoicePreview = props => {
       <td>{invoice.client.name}</td>
       <td>{moment(invoice.start_date).format('L')}</td>
       <td>{moment(invoice.end_date).format('L')}</td>
-      <td>${balance}</td>
+      <td>{
+          invoice.adjustment && invoice.adjustment !== 0
+          ?
+            <strong>${invoice.adjustment}</strong>
+          :
+            <em>n/a</em>
+        }</td>
+      <td>
+        {
+          invoice.paid
+          ?
+            <strong className='text-success'>${invoice.balance}</strong>
+          :
+            <strong className='text-danger'>${invoice.balance}</strong>
+        }
+        </td>
       <td>{invoice.tickets.length}</td>
       <td>{invoice.paid ? <em>Paid</em> : <strong>UNPAID</strong>}</td>
       <td>
@@ -44,7 +59,7 @@ const InvoicePreview = props => {
         </Modal.Header>
 
         <Modal.Body>
-          <ViewInvoice invoice={invoice} />
+          <ViewInvoice invoice={invoice} adjustment={props.adjustment}/>
         </Modal.Body>
 
         <Modal.Footer>

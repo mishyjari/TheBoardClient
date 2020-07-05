@@ -1,16 +1,17 @@
 import React from 'react'
-import { CLIENTS_API } from '../_helpers/Apis.js';
+import { CLIENTS_API, INVOICES_API, HEADERS } from '../_helpers/Apis.js';
 import { Container, Card, Button, Accordion, Table, Form } from 'react-bootstrap';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
 
+import InvoicePreview from './InvoicePreview.js'
 import NewClient from './NewClient.js';
 
 class ClientShow extends React.Component {
   state = {
     client: {
       tickets: [],
-      tickets_today: []
+      tickets_today: [],
     },
     editFields: false
   }

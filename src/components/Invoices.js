@@ -50,6 +50,12 @@ class Invoices extends React.Component {
     })
   }
 
+  handleAdjustment = (invoice, newAdj) => {
+    const inv = {...invoice};
+    inv.adjustment = newAdj;
+    this.updateInvoice(inv)
+  }
+
   handleSearch = client_id => {
     //const client_id = this.props.clients.find(c => c.name === this.props.selectedClient.name).id
 
@@ -147,6 +153,7 @@ class Invoices extends React.Component {
                       <th>Client Name</th>
                       <th>Start Date</th>
                       <th>End Date</th>
+                      <th>Adjustments</th>
                       <th>Balance</th>
                       <th>Num. Tickets</th>
                       <th>Paid?</th>
@@ -161,6 +168,7 @@ class Invoices extends React.Component {
                             balance={this.getBalance(i.tickets)}
                             togglePaid={this.updateInvoice}
                             handleDelete={this.handleDelete}
+                            adjustment={this.handleAdjustment}
                           />)
                         :
                           <h4>Nothing To Show</h4>

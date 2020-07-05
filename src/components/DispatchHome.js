@@ -75,7 +75,9 @@ class DispatchHome extends React.Component {
 			// Set filteredTickets to descending order by created_at
 			filteredTickets: tickets.filter((a,b) => {
 				return a.created_at < b.created_at ? 1 : -1
-			})
+			}),
+			ticketSearchResultCount: null,
+			ticketFilterTitle: 'Incomplete and Unassigned Tickets',
 		}))
 	}
 
@@ -161,7 +163,8 @@ class DispatchHome extends React.Component {
 	handleFilterTickets = (filter, heading) => {
 		this.setState(prevState => ({
 			filteredTickets: prevState.tickets.filter(filter),
-			ticketFilterTitle: heading
+			ticketFilterTitle: heading,
+			ticketSearchResultCount: null
 		}))
 	}
 
@@ -505,6 +508,7 @@ class DispatchHome extends React.Component {
 										ticketSearchResultCount={this.state.ticketSearchResultCount}
 										handlePageChange={this.handlePageChange}
 										activePage={this.state.activePage}
+										reset={this.populateTickets}
 										 />
 								</Route>
 

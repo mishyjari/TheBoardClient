@@ -30,7 +30,7 @@ const TicketPreview = props => {
     if ( is_complete && !pod ) { return 'warning' }
     else if ( is_complete ) { return 'success' }
     else if ( !courier_id ) { return 'primary' }
-    else { return 'light' }
+    else { return 'warning' }
   }
 
   const QuickAssign = () => {

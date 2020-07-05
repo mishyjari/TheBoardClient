@@ -60,7 +60,7 @@ const StatusBar = props => {
 											onClick={() => props.courierTicketsToday(courier.id)}
 										>
 
-											<Badge pill variant='success' size='lg'> {courier.tickets_today.length}</Badge>
+											<Badge pill variant='info' size='lg'> {courier.tickets_today.length}</Badge>
 
 										</NavLink></td>
 									</tr>
@@ -71,6 +71,8 @@ const StatusBar = props => {
 						</Table>
 						</Accordion.Collapse>
 					</Row>
+					</Accordion>
+					<Accordion defaultActiveKey='toggleClients'>
 					<Row>
 						<Accordion.Toggle
 							as={'h4'}
@@ -106,7 +108,7 @@ const StatusBar = props => {
 											to='/dispatch/tickets'
 											onClick={() => props.clientTickets(client.id)}
 										>
-											<Badge pill variant='success' size='lg'> {client.incomplete_tickets.length}</Badge>
+											<Badge pill variant='info' size='lg'> {client.incomplete_tickets.length}</Badge>
 										</NavLink></td>
 									</tr>
 									}

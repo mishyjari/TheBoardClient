@@ -33,23 +33,28 @@ class TicketList extends React.Component {
 				<Route exact path='/dispatch/tickets'>
 					<Accordion>
 						<Row>
-							<Col>
 							<h4 className='sub-sub-heading'>Displaying {this.props.ticketFilterTitle}</h4>
+						</Row>
+						<Row>
+							<Col></Col>
 							{ this.props.ticketSearchResultCount
 							?
-								<Pagination
-									activePage={this.props.activePage}
-									itemClass="page-item"
-									linkClass="page-link"
-									itemsCountPerPage={20}
-									totalItemsCount={this.props.ticketSearchResultCount}
-									pageRangeDisplayed={5}
-									onChange={this.props.handlePageChange.bind(this)}
-									/>
+								<Col>
+									<NavLink to='/dispatch/tickets' onClick={this.props.reset}>
+										<Button block variant='outline-primary' size='sm'>Reset</Button>
+									</NavLink>
+									<Pagination
+										activePage={this.props.activePage}
+										itemClass="page-item"
+										linkClass="page-link"
+										itemsCountPerPage={20}
+										totalItemsCount={this.props.ticketSearchResultCount}
+										pageRangeDisplayed={5}
+										onChange={this.props.handlePageChange.bind(this)}
+										/>
+									</Col>
 								: null
-							}
-
-							</Col>
+							}<Col></Col>
 						</Row>
 
 					<Row>
