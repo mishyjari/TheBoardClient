@@ -1,12 +1,12 @@
 import React from 'react';
-import { Container, Row, Form, Col, Button, Tab, Tabs } from 'react-bootstrap';
+import { Container, Row, Form, Col, Button, Tab, Tabs, Accordion, Card } from 'react-bootstrap';
 import moment from 'moment';
 
 class NewInvoice extends React.Component {
   state = {
     selectedClient: 'Select Client',
-    startDate: moment().subtract('months',1).startOf('day'),
-    endDate: moment().endOf('day'),
+    startDate: moment().subtract('months',1).startOf('month').startOf('day'),
+    endDate: moment().subtract('months',1).endOf('month').endOf('day'),
   }
 
   prefixZero = num => {
@@ -23,10 +23,6 @@ class NewInvoice extends React.Component {
   setDateFromForm = (dateString,isEod) => {
     const d = dateString.split('-');
     return moment({'year': Number(d[0]), 'month': this.prefixZero(d[1])-1, 'day': this.prefixZero(d[2])})
-  }
-
-  handleSubmit = e => {
-
   }
 
   dateSelector = callback => {
@@ -73,6 +69,17 @@ class NewInvoice extends React.Component {
       </Form.Row>
       </Container>
     )
+  }
+
+  invoiceAll = () => {
+    this.props.clients.forEach(client => {
+      this.props.handleSubmit({
+        selectedClient: client.name,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate
+      })
+    });
+    document.getElementById('newInvoiceToggle').className='collapse'
   }
 
   render() {
@@ -146,17 +153,44 @@ class NewInvoice extends React.Component {
           </Tabs>
 
         </Form.Group>
+        <Row>
+          <Col>
         {
           this.state.selectedClient === 'Select Client'
           ?
-            <Button variant='secondary' disabled>Select a Client</Button>
+            <Button variant='outline-secondary' block disabled>Select a Client</Button>
           :
-            <Button onClick={() => {
+            <Button block onClick={() => {
                 this.props.handleSubmit(this.state);
+                document.getElementById('newInvoiceToggle').className='collapse'
               }
             }
               >Submit</Button>
         }
+      </Col><Col>
+        <Accordion>
+          <Accordion.Toggle
+            as={Button}
+            variant='info'
+            eventKey='invoiceAll'
+            block
+          >
+            Invoice ALL CLIENTS
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey='invoiceAll'>
+            <Card>
+              <Card.Header><h5>Confirm INVOICE ALL</h5></Card.Header>
+              <Card.Body>
+                <Card.Text>
+                  <strong>Are you sure you want to create an invoice for ALL CLIENTS for the selected date range?</strong>
+                  <Button variant='success' block onClick={this.invoiceAll}>Create Invoices</Button>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Accordion.Collapse>
+        </Accordion>
+      </Col>
+      </Row>
 
       </Container>
     )

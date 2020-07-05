@@ -125,7 +125,7 @@ class Invoices extends React.Component {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {
-                      this.props.clients.map(client => <Dropdown.Item
+                      this.props.clients.map(client => <><Dropdown.Item
                         eventKey={client.id}
                         onClick={() => {
                           this.handleSearch(client.id)
@@ -133,7 +133,9 @@ class Invoices extends React.Component {
                           }
                         }>
                           {client.name}
-                        </Dropdown.Item>)
+                        </Dropdown.Item>
+                        <Dropdown.Divider /></>
+                        )
                     }
                   </Dropdown.Menu>
                 </Dropdown>

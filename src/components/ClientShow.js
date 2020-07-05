@@ -61,7 +61,7 @@ class ClientShow extends React.Component {
   render() {
     const { name, id, contact_person, contact_phone, address, is_archived, tickets, tickets_today, invoices } = this.state.client
     return (
-      <Container fluid>
+      <Container fluid content={window.innerHeight}>
         <Card>
           <Card.Header>
             <h4>{this.state.client.name} - Client #{id}</h4>
