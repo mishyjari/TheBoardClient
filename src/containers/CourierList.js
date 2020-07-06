@@ -98,7 +98,7 @@ class CourierList extends React.Component {
               checked={this.state.showArchived}
               onChange={() => this.setState(prevState => ({
                 showArchived: !prevState.showArchived,
-                filter: '' 
+                filter: ''
                 }),
                 () => this.props.toggleShowArchived(this.state.showArchived))}
             />

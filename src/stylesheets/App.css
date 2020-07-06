@@ -104,3 +104,7 @@ div.ticketPreview:hover {
 #toast-container {
 	z-index: 99999999;
 }
+
+.newTicketInnerToggle {
+	margin-bottom: 10px;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Col, Row, Button } from 'react-bootstrap';
+import { Form, Col, Row, Button, Accordion, Card } from 'react-bootstrap';
 import moment from 'moment'
 
 class NewTicket extends React.Component {
@@ -10,17 +10,31 @@ class NewTicket extends React.Component {
     time_ready: moment(),
     time_due: null,
     pickup: null,
+    pickup_contact: null,
+    pickup_details: null,
     dropoff: null,
+    dropoff_contact: null,
+    dropoff_details: null,
     is_rush: false,
     rush_details: null,
-    is_oversize: null,
+    is_oversize: false,
     oversize_details: null,
     notes: null,
-    base_charge: null,
-    rush_charge: null,
-    oversize_charge: null,
-    is_complete: false
+    base_charge: 0,
+    rush_charge: 0,
+    oversize_charge: 0,
+    is_complete: false,
+    is_roundtrip: false,
+    roundtrip_details: null,
+    roundtrip_charge: 0,
+    additional_charge: 0,
+    notes: null
   };
+
+  totalCharge = () => {
+    const { roundtrip_charge, oversize_charge, rush_charge, additional_charge, base_charge } = this.state
+    return (roundtrip_charge + oversize_charge + rush_charge + additional_charge + base_charge)
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -187,79 +201,310 @@ class NewTicket extends React.Component {
           </Form.Control>
         </Form.Group>
 
+
       {/* Pickup Address */}
-        <Form.Group
-          controlId='newTicket.controlInput1'
-          onChange={this.setPlainTextFromForm}
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='pickup-info'
+          variant='outline-dark'
+          block
         >
-          <Form.Label>Pickup Address: </Form.Label>
-          <Form.Control
-            type='textarea'
-            value={this.state.pickup}
-            name='pickup'
-            placeHolder='Enter Full Address for Pickup'
-          />
-        </Form.Group>
+          Pickup Information
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='pickup-info'
+        >
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+          <Form.Group
+            controlId='newTicket.controlInput1'
+            onChange={this.setPlainTextFromForm}
+          >
+            <Form.Label>Pickup Address: </Form.Label>
+            <Form.Control
+              type='text'
+              value={this.state.pickup}
+              name='pickup'
+              placeHolder='Enter Full Address for Pickup'
+            />
+            <Form.Control
+              type='text'
+              value={this.state.pickup_contact}
+              name='pickup_contact'
+              placeHolder='Pickup Contact (name, phone, etc)'
+            />
+            <Form.Control
+              as='textarea'
+              value={this.state.pickup_details}
+              name='pickup_details'
+              placeHolder='Additional Pickup Details'
+            />
+          </Form.Group>
+        </Card>
+        </Accordion.Collapse>
+      </Accordion>
 
       {/* Dropoff Address */}
-        <Form.Group
-          controlId='newTicket.controlInput2'
-          onChange={this.setPlainTextFromForm}
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='pickup-info'
+          variant='outline-dark'
+          block
         >
-          <Form.Label>Dropoff Address: </Form.Label>
-          <Form.Control
-            type='textarea'
-            value={this.state.dropoff}
-            name='dropoff'
-            placeHolder='Enter Full Address for Dropoff'
-          />
-        </Form.Group>
+          Dropoff Information
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='pickup-info'
+        >
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+          <Form.Group
+            onChange={this.setPlainTextFromForm}
+          >
+            <Form.Label>Dropoff Address: </Form.Label>
+            <Form.Control
+              type='text'
+              value={this.state.dropoff}
+              name='dropoff'
+              placeHolder='Enter Full Address for Dropoff'
+            />
+            <Form.Control
+              type='text'
+              value={this.state.dropoff_contact}
+              name='dropoff_contact'
+              placeHolder='Dropoff Contact (name, phone, etc)'
+            />
+            <Form.Control
+              as='textarea'
+              value={this.state.dropoff_details}
+              name='dropoff_details'
+              placeHolder='Additional Dropoff Details'
+            />
+          </Form.Group>
+        </Card>
+        </Accordion.Collapse>
+      </Accordion>
+
+      {/* Roundtrip Info */}
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='roundtrip-info'
+          variant='outline-dark'
+          block
+        >
+          Roundtrip
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='roundtrip-info'
+        >
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+          <Form.Group>
+            <Form.Check
+              label='Delivery is Roundtrip'
+              type='switch'
+              name='is_roundtrip'
+              value={this.state.is_roundtrip}
+              checked={this.state.is_roundtrip}
+              id='roundtrip_check'
+              onChange={() => this.setState(prevState => ({ is_roundtrip: !prevState.is_roundtrip }))}
+            />
+            {
+              this.state.is_rush
+              ?
+                <Form.Control
+                  as='textarea'
+                  value={this.state.roundtrip_details}
+                  name='roundtrip_details'
+                  placeHolder='Roundtrip Details'
+                  onChange={this.setPlainTextFromForm}
+                />
+              :
+                null
+            }
+
+          </Form.Group>
+        </Card>
+        </Accordion.Collapse>
+      </Accordion>
 
       {/* Time Ready - Default NOW */}
-        <Form.Group
-          controlId='newTicket.controlInput3'
-          onChange={this.setDateTimeFromForm}
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='time-info'
+          variant='outline-dark'
+          block
         >
-          <Form.Label>Time Ready: </Form.Label>
-          <Form.Control
-            type='date'
-            value={this.formatDateForInput(this.state.time_ready)}
-            name="time_ready"
-          />
-          <Form.Control
-            type='time'
-            value={this.formatTimeForInput(this.state.time_ready)}
-            name="time_ready"
-          />
-        </Form.Group>
-
-
-      {/* Time Due - Default Ready + 3 Hours or 90min if Rush */}
-        <Form.Group
-          controlId='newTicket.controlInput3'
-          onChange={this.setDateTimeFromForm}
+          Time Details
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='time-info'
         >
-          <Form.Label>Time Due: </Form.Label>
-          <Form.Control
-            type='date'
-            value={this.formatDateForInput(this.state.time_due)}
-            name="time_due"
-          />
-          <Form.Control
-            type='time'
-            value={this.formatTimeForInput(this.state.time_due)}
-            name="time_due"
-          />
-        </Form.Group>
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+            <Form.Group
+              controlId='newTicket.controlInput3'
+              onChange={this.setDateTimeFromForm}
+            >
+              <Form.Label>Time Ready: </Form.Label>
+              <Form.Control
+                type='date'
+                value={this.formatDateForInput(this.state.time_ready)}
+                name="time_ready"
+              />
+              <Form.Control
+                type='time'
+                value={this.formatTimeForInput(this.state.time_ready)}
+                name="time_ready"
+              />
+            </Form.Group>
+            {/* Time Due - Default Ready + 3 Hours or 90min if Rush */}
+            <Form.Group
+              controlId='newTicket.controlInput3'
+              onChange={this.setDateTimeFromForm}
+            >
+              <Form.Label>Time Due: </Form.Label>
+              <Form.Control
+                type='date'
+                value={this.formatDateForInput(this.state.time_due)}
+                name="time_due"
+              />
+              <Form.Control
+                type='time'
+                value={this.formatTimeForInput(this.state.time_due)}
+                name="time_due"
+              />
+              <Form.Check
+                label='Rush Delivery'
+                type='switch'
+                name='is_rush'
+                value={this.state.is_rush}
+                checked={this.state.is_rush}
+                id='oversize_check'
+                onChange={() => this.setState(prevState => ({ is_rush: !prevState.is_rush }))}
+              />
+              {
+                this.state.is_rush
+                ?
+                  <Form.Control
+                    as='textarea'
+                    value={this.state.rush_details}
+                    name='rush_details'
+                    placeHolder='Rush Details'
+                    onChange={this.setPlainTextFromForm}
+                  />
+                :
+                  null
+              }
+            </Form.Group>
+          </Card>
+        </Accordion.Collapse>
+      </Accordion>
 
-      {/* Rush Details (according textarea) */}
-
-      {/* Oversize Checkbox */}
       {/* Oversize details textarea */}
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='time-info'
+          variant='outline-dark'
+          block
+        >
+          Oversize Details
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='time-info'
+        >
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+            <Form.Check
+              label='Oversize Package'
+              type='switch'
+              name='is_oversize'
+              value={this.state.is_oversize}
+              checked={this.state.is_oversize}
+              id='oversize_check'
+              onChange={() => this.setState(prevState => ({ is_oversize: !prevState.is_oversize }))}
+            />
+            {
+              this.state.is_oversize
+              ?
+                <Form.Control
+                  as='textarea'
+                  value={this.state.oversize_details}
+                  name='oversize_details'
+                  placeHolder='Oversize Details'
+                  onChange={this.setPlainTextFromForm}
+                />
+              :
+                null
+            }
+          </Card>
+        </Accordion.Collapse>
+      </Accordion>
+
+      <Accordion>
+        <Accordion.Toggle
+          className='newTicketInnerToggle'
+          as={Button}
+          eventKey='notes'
+          variant='outline-dark'
+          block
+        >
+          Additional Notes
+        </Accordion.Toggle>
+        <Accordion.Collapse
+          eventKey='notes'
+        >
+          <Card style={{
+              padding: '10px',
+              borderRadius: '0 0 20px 20px',
+              boxShadow: '1px 2px 4px #fafafs',
+              backgroundColor: '#fafafa'
+            }}>
+            <Form.Control
+              as='textarea'
+              name='notes'
+              placeholder='Additonal Notes'
+              value={this.state.notes}
+              onChange={this.setPlainTextFromForm}
+            />
+          </Card>
+        </Accordion.Collapse>
+      </Accordion>
 
       {/* Base charge */}
+      <Form.Row>
         <Form.Group
-          controlId='newTicket.controlInput4'
+          as={Col}
           onChange={this.setNumberValueFromForm}
         >
           <Form.Label>Base Charge: </Form.Label>
@@ -269,9 +514,72 @@ class NewTicket extends React.Component {
             name='base_charge'
           />
         </Form.Group>
-      {/* Rush charge - default if Rush = base*1.5, else hidden */}
-      {/* OS Charge - default value maybe, hide if none */}
-
+        {
+          this.state.is_roundtrip
+          ?
+            <Form.Group
+              as={Col}
+              onChange={this.setNumberValueFromForm}
+            >
+              <Form.Label>Roundtrip Charge: </Form.Label>
+              <Form.Control
+                type='number'
+                value={this.state.roundtrip_charge}
+                name='roundtrip_charge'
+              />
+            </Form.Group>
+          :
+            null
+        }
+        {
+          this.state.is_rush
+          ?
+            <Form.Group
+              as={Col}
+              onChange={this.setNumberValueFromForm}
+            >
+              <Form.Label>Rush Charge: </Form.Label>
+              <Form.Control
+                type='number'
+                value={this.state.rush_charge}
+                name='rush_charge'
+              />
+            </Form.Group>
+          :
+            null
+        }
+        {
+          this.state.is_oversize
+          ?
+            <Form.Group
+              as={Col}
+              onChange={this.setNumberValueFromForm}
+            >
+              <Form.Label>Oversize Charge: </Form.Label>
+              <Form.Control
+                type='number'
+                value={this.state.oversize_charge}
+                name='oversize_charge'
+              />
+            </Form.Group>
+          :
+            null
+        }
+        <Form.Group
+          as={Col}
+          onChange={this.setNumberValueFromForm}
+        >
+          <Form.Label>Additonal Charge: </Form.Label>
+          <Form.Control
+            type='number'
+            value={this.state.additional_charge}
+            name='additional_charge'
+          />
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <h5>Total Charge: ${this.totalCharge()}</h5>
+      </Form.Row>
         <Form.Group>
           <Button
             type='submit'
