@@ -28,12 +28,18 @@ class NewTicket extends React.Component {
     roundtrip_details: null,
     roundtrip_charge: 0,
     additional_charge: 0,
-    notes: null
+    notes: null,
+    total_charge: 0
   };
 
   totalCharge = () => {
+    let sum = 0
     const { roundtrip_charge, oversize_charge, rush_charge, additional_charge, base_charge } = this.state
-    return (roundtrip_charge + oversize_charge + rush_charge + additional_charge + base_charge)
+    const charges = [this.state.roundtrip_charge, this.state.oversize_charge, this.state.rush_charge, this.state.additional_charge, this.state.base_charge]
+    charges.forEach(charge => {
+      if (charge) { sum += Number(charge) }
+    })
+    return sum;
   }
 
   handleSubmit = e => {
@@ -135,7 +141,9 @@ class NewTicket extends React.Component {
     const key = e.target.name;
     const val = e.target.value;
 
-    this.setState({ [key]: Number(val) })
+    this.setState({ [key]: Number(val) }, () => {
+      this.setState({ total_charge: this.totalCharge() })
+    })
   }
 
   handleSubmitNewTicket = e => {
@@ -146,16 +154,16 @@ class NewTicket extends React.Component {
   componentDidMount() {
     if (this.props.ticket){
       const data = this.props.ticket;
-      data.time_due = moment(data.time_due)
-      data.time_ready = moment(data.time_ready)
-      this.setState(this.props.ticket)
+      data['time_due'] = moment(data.time_due);
+      data['time_ready'] = moment(data.time_ready);
+
+      this.setState(data)
     } else {
       this.setState({
         time_due: this.getDefaultDueTime()
       })
     }
   }
-
 
   render() {
     return (
@@ -328,7 +336,7 @@ class NewTicket extends React.Component {
               onChange={() => this.setState(prevState => ({ is_roundtrip: !prevState.is_roundtrip }))}
             />
             {
-              this.state.is_rush
+              this.state.is_roundtrip
               ?
                 <Form.Control
                   as='textarea'
@@ -404,7 +412,7 @@ class NewTicket extends React.Component {
                 name='is_rush'
                 value={this.state.is_rush}
                 checked={this.state.is_rush}
-                id='oversize_check'
+                id='rush_check'
                 onChange={() => this.setState(prevState => ({ is_rush: !prevState.is_rush }))}
               />
               {

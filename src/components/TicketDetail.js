@@ -13,6 +13,10 @@ const TicketDetail = props => {
 
   const { base_charge, client, pod, time_delivered, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
 
+  const passPropsAgain = () => {
+    const data = {...props.ticket}
+    console.log(data)
+  }
 
   return (
 
@@ -20,7 +24,12 @@ const TicketDetail = props => {
       {/* Buttons */}
       <Row>
         <Col>
-          <Accordion.Toggle as={Button} variant="outline-secondary" eventKey={`editTicket-${id}`} block size="sm">
+          <Accordion.Toggle
+            as={Button}
+            variant="outline-secondary"
+            eventKey={`editTicket-${id}`}
+            block size="sm"
+                        >
             Edit Ticket
           </Accordion.Toggle>
         </Col>
@@ -106,6 +115,20 @@ const TicketDetail = props => {
                 <td>{moment(time_due).format("L, LT")}</td>
               </tr>
               <tr>
+                <th>Rush?</th>
+                <td>{props.ticket.is_rush ? 'Yes' : 'No' }</td>
+              </tr>
+              {
+                props.ticket.is_rush
+                ?
+                  <tr>
+                    <th>Rush Details</th>
+                    <td>{props.ticket.rush_details}</td>
+                  </tr>
+                :
+                  null
+              }
+              <tr>
                 <th>Delivered</th>
                 <td>
                   {
@@ -113,7 +136,7 @@ const TicketDetail = props => {
                     ?
                       moment(created_at).format("L, LT")
                     :
-                      null
+                      'No'
                   }
                 </td>
               </tr>
@@ -129,8 +152,38 @@ const TicketDetail = props => {
                   }
                 </td>
               </tr>
+              <tr>
+                <th>Oversize?</th>
+                <td>{props.ticket.is_oversize ? 'Yes' : 'No' }</td>
+              </tr>
+              {
+                props.ticket.is_oversize
+                ?
+                  <tr>
+                    <th>Oversize Details</th>
+                    <td>{props.ticket.oversize_details}</td>
+                  </tr>
+                :
+                  null
+              }
+              <tr>
+                <th>Roundtrip?</th>
+                <td>{props.ticket.is_roundtrip ? 'Yes' : 'No' }</td>
+              </tr>
+              {
+                props.ticket.id_roundtrip
+                ?
+                  <tr>
+                    <th>Roundtrip Details</th>
+                    <td>{props.ticket.roundtrip_details}</td>
+                  </tr>
+                :
+                  null
+              }
             </tbody>
           </Table>
+          <h6>Notes:</h6>
+          <p>{props.ticket.notes}</p>
         </Col>
         <Col>
           <Table striped hover>
@@ -146,12 +199,28 @@ const TicketDetail = props => {
                   }</td>
               </tr>
               <tr>
-                <th>Pickup</th>
+                <th>Pickup Address</th>
                 <td>{pickup}</td>
+              </tr>
+              <tr>
+                <th>Pickup Contact</th>
+                <td>{props.ticket.pickup_contact}</td>
+              </tr>
+              <tr>
+                <th>Pickup Details</th>
+                <td>{props.ticket.pickup_details}</td>
               </tr>
               <tr>
                 <th>Dropoff</th>
                 <td>{dropoff}</td>
+              </tr>
+              <tr>
+                <th>Dropoff Contact</th>
+                <td>{props.ticket.dropoff_contact}</td>
+              </tr>
+              <tr>
+                <th>Dropoff Details</th>
+                <td>{props.ticket.dropoff_details}</td>
               </tr>
               <tr>
                 <th>Recieved By</th>
@@ -165,9 +234,62 @@ const TicketDetail = props => {
                   }
                 </td>
               </tr>
+            </tbody>
+          </Table>
+
+          <Table>
+            <tbody>
               <tr>
-                <th>Charge</th>
-                <td>${base_charge}</td>
+                <th>Base Charge</th>
+                <th>Additional Charge</th>
+                {
+                  props.ticket.is_rush
+                  ?
+                    <th>Rush Charge</th>
+                  :
+                    null
+                }
+                {
+                  props.ticket.is_roundtrip
+                  ?
+                    <th>Roundtrip Charge</th>
+                  :
+                    null
+                }
+                {
+                  props.ticket.is_oversize
+                  ?
+                    <th>Oversize Charge</th>
+                  :
+                    null
+                }
+                <th>Total Charge</th>
+              </tr>
+              <tr>
+                <td>${props.ticket.base_charge}</td>
+                <td>${props.ticket.additional_charge}</td>
+                {
+                  props.ticket.is_rush
+                  ?
+                    <td>${props.ticket.rush_charge}</td>
+                  :
+                    null
+                }
+                {
+                  props.ticket.is_roundtrip
+                  ?
+                    <td>${props.ticket.roundtrip_charge}</td>
+                  :
+                    null
+                }
+                {
+                  props.ticket.is_oversize
+                  ?
+                    <td>${props.ticket.oversize_charge}</td>
+                  :
+                    null
+                }
+                <td>${props.ticket.total_charge}</td>
               </tr>
             </tbody>
           </Table>
