@@ -286,13 +286,20 @@ class DispatchHome extends React.Component {
 			const oldData = couriers.find(c => c.id == courier.id)
 			const index = couriers.indexOf(oldData)
 
+			const filteredCouriers = [...this.state.filteredCouriers]
+			const oldFilteredData = filteredCouriers.find(c => c.id == courier.id)
+			const filteredIndex = filteredCouriers.indexOf(oldData)
+
 			couriers.splice(index,1,courier)
+			filteredIndex >= 0
+			?
+				filteredCouriers.splice(filteredIndex, 1, courier)
+			:
+				filteredCouriers.push(courier)
 
 			this.setState({
 				couriers: couriers,
-				filteredCouriers: couriers.filter(
-					c => !c.is_archived)
-					.sort((a,b) => (b.first_name < a.first_name ? 1 : -1))
+				filteredCouriers: filteredCouriers
 				}, () => this.handleNewToast('Success', `Courier #${courier.id} Updated!`) )})
 		}
 

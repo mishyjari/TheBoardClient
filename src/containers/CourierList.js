@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import CourierPreview from './CourierPreview.js';
 import NewCourier from '../components/NewCourier.js'
 import CourierShow from '../components/CourierShow.js';
@@ -16,7 +16,7 @@ class CourierList extends React.Component {
 
   toggleActive = courier => {
     courier.is_active = !courier.is_active
-    this.props.updateCourier(courier, this.handleSort(this.state.colSort, true))
+    this.props.updateCourier(courier)
   }
 
   handleFilter = e => {
