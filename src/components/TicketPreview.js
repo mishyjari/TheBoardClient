@@ -141,7 +141,15 @@ const TicketPreview = props => {
         </Card.Text>
         <Row>
           <Col>
-            <Accordion.Toggle as={Button} variant="outline-info" eventKey={`ticketDetails-${id}`} block size="sm">
+            <Accordion.Toggle
+              as={Button}
+              variant="outline-info"
+               eventKey={`ticketDetails-${id}`}
+               block
+               size="sm"
+               id={`ticketDetails-${id}`}
+               onClick={props.toggleActiveMenus}
+               active={props.activeMenus.includes(`ticketDetails-${id}`)}>
               Show Details
             </Accordion.Toggle>
           </Col>
@@ -162,6 +170,8 @@ const TicketPreview = props => {
             clients={props.clients}
 						couriers={props.couriers}
             handleNewTicket={props.handleUpdate}
+            activeMenus={props.activeMenus}
+            toggleActiveMenus={props.toggleActiveMenus}
           />
         </Card.Body>
       </Accordion.Collapse>

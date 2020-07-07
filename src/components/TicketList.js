@@ -13,7 +13,19 @@ import Pagination from 'react-js-pagination';
 class TicketList extends React.Component {
 
 	state = {
-		totalResults: 0
+		totalResults: 0,
+		activeMenus: []
+	}
+
+	toggleActiveMenus = e => {
+		const id = e.target.id;
+		const activeMenus = [...this.state.activeMenus];
+		activeMenus.includes(id)
+		?
+			activeMenus.splice(activeMenus.indexOf(id), 1)
+		:
+			activeMenus.push(id)
+		this.setState({ activeMenus})
 	}
 
 	componentDidRecieveProps() {
@@ -31,7 +43,7 @@ class TicketList extends React.Component {
 						handleDelete={this.props.handleDelete}/>} />
 
 				<Route exact path='/dispatch/tickets'>
-					<Accordion>
+
 						<Row>
 							<h4 className='sub-sub-heading'>Displaying {this.props.ticketFilterTitle}</h4>
 						</Row>
@@ -57,8 +69,9 @@ class TicketList extends React.Component {
 							}<Col></Col>
 						</Row>
 
-					<Row>
+					<Row id='tickets-menu-container'>
 						<Col>
+							<Accordion>
 								{/* New ticket toggle */}
 								<Accordion.Toggle
 									as={Button}
@@ -66,6 +79,8 @@ class TicketList extends React.Component {
 									eventKey={'newTicket'}
 									id={'new-ticket-btn'}
 									className='form-toggle-btn'
+									onClick={this.toggleActiveMenus}
+				          active={this.state.activeMenus.includes('new-ticket-btn')}
 									block
 								>
 									New Ticket
@@ -73,7 +88,7 @@ class TicketList extends React.Component {
 
 								<Accordion.Collapse
 									eventKey={'newTicket'}
-									id={'ticketDetails-0'}
+									id={'new-ticket-accordion'}
 									>
 									<NewTicket
 										clients={this.props.clients}
@@ -81,9 +96,12 @@ class TicketList extends React.Component {
 										handleNewTicket={this.props.handleNewTicket}
 									/>
 								</Accordion.Collapse>
+								</Accordion>
 							</Col>
 
 							<Col>
+
+							<Accordion>
 								{/* Filters Toggle */}
 								<Accordion.Toggle
 
@@ -92,13 +110,15 @@ class TicketList extends React.Component {
 									eventKey={'searchToggle'}
 									id={'search-toggle-btn'}
 									className='form-toggle-btn'
+									onClick={this.toggleActiveMenus}
+				          active={this.state.activeMenus.includes('search-toggle-btn')}
 									block
 								>
 									Filters and Search
 								</Accordion.Toggle>
 
 								<Accordion.Collapse
-									className='content-main'
+									className='dropdown-inner'
 									eventKey={'searchToggle'}
 									id={'searchToggle'}
 								>
@@ -116,9 +136,11 @@ class TicketList extends React.Component {
 									/>
 									</Col>
 								</Accordion.Collapse>
+							</Accordion>
 							</Col>
 						</Row>
-						<Row>
+						<Row style={{width: '100%', justifyContent: 'center'}}>
+							<Accordion>
 							<Col>
 								{/* Render tickets from props */}
 								{
@@ -133,6 +155,8 @@ class TicketList extends React.Component {
 											handleUpdate={this.props.handleUpdate}
 											handleDelete={this.props.handleDelete}
 											selectTicket={this.props.selectTicket}
+											activeMenus={this.state.activeMenus}
+											toggleActiveMenus={this.toggleActiveMenus}
 											/>)
 								}
 								{ this.props.ticketSearchResultCount
@@ -149,8 +173,9 @@ class TicketList extends React.Component {
 									: null
 								}
 							</Col>
+						</Accordion>
 						</Row>
-					</Accordion>
+
 				</Route>
 			</Container>
 		)

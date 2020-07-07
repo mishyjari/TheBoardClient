@@ -169,7 +169,7 @@
 	color: #383838
 }
 .content-main {
-	box-shadow: inset 1px 2px 4px  #C0C0C0 ;
+	box-shadow: inset 1px 2px 4px  #C0C0C0;
 	border-radius: 10px;
 	background-color: #fff;
 }
@@ -237,4 +237,17 @@ div.ticketPreview:hover {
 
 .newTicketInnerToggle {
 	margin-bottom: 10px;
+}
+
+.form-toggle-btn + .collapse, .form-toggle-btn + .collapsing  {
+	width: 100%;
+	position: absolute;
+	z-index: 9999999;
+}
+
+.dropdown-inner {
+	padding: 20px;
+	box-shadow: 2px 4px 8px #565656 ;
+	border-radius: 0 0 10px 10px;
+	background-color: rgba(255,255,255,.95)
 }

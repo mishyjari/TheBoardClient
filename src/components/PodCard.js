@@ -56,7 +56,7 @@ class PodCard extends React.Component {
 
   render() {
     return (
-      <Card id='complete-ticket-card'>
+      <Card id='complete-ticket-card' className='dropdown-inner'>
         <Card.Header>Complete Ticket #{this.props.ticket.id}</Card.Header>
         <Card.Body>
           <Form>

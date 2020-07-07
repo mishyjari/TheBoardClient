@@ -3192,7 +3192,6 @@ input[type="button"].btn-block {
 }
 
 .collapsing {
-  position: relative;
   height: 0;
   overflow: hidden;
   transition: height 0.35s ease;
@@ -4750,7 +4749,7 @@ input[type="button"].btn-block {
   margin: 2rem;
   -ms-flex-direction: column;
   flex-direction: column;
-  min-width: 0;
+  min-width: 100%;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;

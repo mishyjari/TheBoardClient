@@ -29,7 +29,8 @@ class NewTicket extends React.Component {
     roundtrip_charge: 0,
     additional_charge: 0,
     notes: null,
-    total_charge: 0
+    total_charge: 0,
+    activeMenus: [],
   };
 
   totalCharge = () => {
@@ -165,9 +166,20 @@ class NewTicket extends React.Component {
     }
   }
 
+  toggleActiveMenus = e => {
+    const id = e.target.id;
+    const activeMenus = [...this.state.activeMenus];
+    activeMenus.includes(id)
+    ?
+      activeMenus.splice(activeMenus.indexOf(id), 1)
+    :
+      activeMenus.push(id)
+    this.setState({ activeMenus})
+  }
+
   render() {
     return (
-      <Col className='content-main'>
+      <Col className='dropdown-inner'>
       <Form onSubmit={this.handleSubmitNewTicket}>
       {/* Select Client */}
         <Form.Group
@@ -217,6 +229,9 @@ class NewTicket extends React.Component {
           as={Button}
           eventKey='pickup-info'
           variant='outline-dark'
+          id='pickupInfoBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('pickupInfoBtn')}
           block
         >
           Pickup Information
@@ -226,7 +241,7 @@ class NewTicket extends React.Component {
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>
@@ -265,6 +280,9 @@ class NewTicket extends React.Component {
           as={Button}
           eventKey='pickup-info'
           variant='outline-dark'
+          id='dropoffInfoBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('dropoffInfoBtn')}
           block
         >
           Dropoff Information
@@ -274,7 +292,7 @@ class NewTicket extends React.Component {
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>
@@ -312,6 +330,9 @@ class NewTicket extends React.Component {
           as={Button}
           eventKey='roundtrip-info'
           variant='outline-dark'
+          id='roundtripInfoBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('roundtripInfoBtn')}
           block
         >
           Roundtrip
@@ -321,7 +342,7 @@ class NewTicket extends React.Component {
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>
@@ -361,6 +382,9 @@ class NewTicket extends React.Component {
           as={Button}
           eventKey='time-info'
           variant='outline-dark'
+          id='timeInfoBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('timeInfoBtn')}
           block
         >
           Time Details
@@ -370,7 +394,7 @@ class NewTicket extends React.Component {
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>
@@ -438,18 +462,21 @@ class NewTicket extends React.Component {
         <Accordion.Toggle
           className='newTicketInnerToggle'
           as={Button}
-          eventKey='time-info'
+          eventKey='oversize-info'
           variant='outline-dark'
+          id='oversizeInfoBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('oversizeInfoBtn')}
           block
         >
           Oversize Details
         </Accordion.Toggle>
         <Accordion.Collapse
-          eventKey='time-info'
+          eventKey='oversize-info'
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>
@@ -485,6 +512,9 @@ class NewTicket extends React.Component {
           as={Button}
           eventKey='notes'
           variant='outline-dark'
+          id='notesBtn'
+          onClick={this.toggleActiveMenus}
+          active={this.state.activeMenus.includes('notesBtn')}
           block
         >
           Additional Notes
@@ -494,7 +524,7 @@ class NewTicket extends React.Component {
         >
           <Card style={{
               padding: '10px',
-              borderRadius: '0 0 20px 20px',
+              borderRadius: '20px 20px 20px 20px',
               boxShadow: '1px 2px 4px #fafafs',
               backgroundColor: '#fafafa'
             }}>

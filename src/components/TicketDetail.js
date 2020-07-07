@@ -13,10 +13,6 @@ const TicketDetail = props => {
 
   const { base_charge, client, pod, time_delivered, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
 
-  const passPropsAgain = () => {
-    const data = {...props.ticket}
-    console.log(data)
-  }
 
   return (
 
@@ -28,7 +24,11 @@ const TicketDetail = props => {
             as={Button}
             variant="outline-secondary"
             eventKey={`editTicket-${id}`}
+            className='form-toggle-btn'
             block size="sm"
+            id={`editTicket-${id}`}
+            onClick={props.toggleActiveMenus}
+            active={props.activeMenus.includes(`editTicket-${id}`)}
                         >
             Edit Ticket
           </Accordion.Toggle>
@@ -51,14 +51,16 @@ const TicketDetail = props => {
                 block
                 as={Button}
                 variant={'outline-success'}
+                className='form-toggle-btn'
                 size='sm'
+                id={`toggleComplete-${id}`}
+                onClick={props.toggleActiveMenus}
+                active={props.activeMenus.includes(`toggleComplete-${id}`)}
               >
                 Mark Complete
               </Accordion.Toggle>
           }
-          <Accordion.Collapse eventKey={'promptForPod'} id={'promptForPod'}>
-            <PodCard ticket={props.ticket} handleComplete={props.handleUpdate} />
-          </Accordion.Collapse>
+
         </Col>
         <Col>
           <Button
@@ -96,6 +98,29 @@ const TicketDetail = props => {
             </Modal.Footer>
           </Modal>
         </Col>
+
+      </Row>
+      <Row>
+
+        <Accordion.Collapse eventKey={`editTicket-${id}`}>
+
+          <Card.Body
+            style={{position: 'absolute', zIndex: '100', width: '100%'}}
+>
+            <NewTicket
+              ticket={props.ticket}
+              clients={props.clients}
+              couriers={props.couriers}
+              handleNewTicket={props.handleUpdate}
+              />
+          </Card.Body>
+        </Accordion.Collapse>
+
+        <Accordion.Collapse
+          style={{position: 'absolute', zIndex: '100', width: '50%'}}
+          eventKey={'promptForPod'} id={'promptForPod'}>
+          <PodCard ticket={props.ticket} handleComplete={props.handleUpdate} />
+        </Accordion.Collapse>
 
       </Row>
       <Row>
@@ -296,18 +321,6 @@ const TicketDetail = props => {
         </Col>
       </Row>
 
-      <Accordion.Collapse eventKey={`editTicket-${id}`}>
-
-        <Card.Body>
-          <NewTicket
-            ticket={props.ticket}
-            clients={props.clients}
-            couriers={props.couriers}
-            handleNewTicket={props.handleUpdate}
-            />
-        </Card.Body>
-
-      </Accordion.Collapse>
 
     </Accordion>
   )
