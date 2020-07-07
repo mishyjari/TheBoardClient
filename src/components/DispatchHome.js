@@ -36,7 +36,8 @@ class DispatchHome extends React.Component {
 		ticketFilterTitle: 'Incomplete and Unassigned Tickets',
 		prevSearch: null,
 		activePage: 1,
-		toasts: []
+		toasts: [],
+		showStatusBar: true,
 	};
 
 	/* INITIAL FETCH - Set state for all clients, all couriers, and select tickets*/
@@ -450,6 +451,10 @@ class DispatchHome extends React.Component {
 		this.setState(prevState => ({ toasts: [...prevState.toasts, toast]}))
 	}
 
+	toggleShowStatusBar = () => {
+		this.setState(prevState => ({ showStatusBar: !prevState.showStatusBar }))
+	}
+
 	render() {
 		return (
 			<Container fluid>
@@ -600,8 +605,22 @@ class DispatchHome extends React.Component {
 						</Col>
 
 
+						<Button
+							onClick={this.toggleShowStatusBar}
+							variant='light'
+							id={this.state.showStatusBar ? 'hide-statusbar-btn' : 'show-statusbar-btn'}
+						>
+							<strong
+								id={this.state.showStatusBar ? 'hide-statusbar-btn-label' : 'show-statusbar-btn-label'}>
+								{this.state.showStatusBar ? '>' : '<'}
+							</strong>
+						</Button>
 
-						<Col sm={3}>
+						<Col
+							sm={3}
+							className={this.state.showStatusBar ? 'status-bar' : 'hidden'}
+							id='status-bar-container'
+						>
 							<StatusBar
 							couriers={this.state.couriers}
 							clients={this.state.clients}

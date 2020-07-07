@@ -16,6 +16,7 @@ class NewInvoice extends React.Component {
   formatDateForInput = d => {
     // Handle null args
     if (d){
+      d = d.local()
       return `${d.year()}-${this.prefixZero(d.month()+1)}-${this.prefixZero(d.date())}`
     } else { return null }
   }
@@ -104,28 +105,19 @@ class NewInvoice extends React.Component {
           </Form.Row>
 
           <Tabs>
-            <Tab eventKey='selectDate' title='Select Date Range'>
+            <Tab eventKey='selectDate' title='Invoice By Month'>
               <Form.Row>
-                  <h5>Start Date: </h5>
+                  <h5>Select Month: </h5>
                   {this.dateSelector(e => {
                       e.persist();
                       const key = e.target.name;
                       const val = e.target.value;
-                      this.setState(prevState => ({
-                        startDate: prevState.startDate[key](val)
-                      }))
+                      this.setState({
+                        startDate: moment()[key](val).startOf('month').startOf('day').local(),
+                        endDate: moment()[key](val).endOf('month').endOf('day').local()
+                      })
                     }
                   )}
-                  <h5>End Date:</h5>
-                  {this.dateSelector(e => {
-                      e.persist();
-                      const key = e.target.name;
-                      const val = e.target.value;
-                      this.setState(prevState => ({
-                        startDate: prevState.startDate[key](val)
-                      }))
-                    })
-                  }
               </Form.Row>
             </Tab>
             <Tab eventKey='customDate' title='Custom Date Range'>

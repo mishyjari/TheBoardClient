@@ -1,3 +1,117 @@
+#main {
+	min-width: 1200px;
+}
+
+#hide-statusbar-btn {
+	transform: scaleY(3);
+	position: sticky;
+	padding-right: 0px;
+	margin-left: 20px;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 1rem;
+	background-color: rgba(0,0,0,0);
+	max-height: 95vh;
+	z-index: 99999;
+	border-right: 1px solid #cfcfcf;
+	margin-right: -30px;
+	border: 0;
+}
+
+#hide-statusbar-btn:hover {
+	width: 10rem;
+	background-image:
+		linear-gradient(
+			to right,
+			rgba(100,100,100,1) 10%,
+			rgba(255,255,255,0) 100%
+			);
+	padding-right: -1000px;
+	margin-left: 40px;
+	margin-right: -195px;
+	z-index: 999999;
+	opacity: .5;
+	border: 0;
+	max-height: 95vh;
+}
+
+#hide-statusbar-btn-label {
+	font-family: 'courier-new';
+	color: rgba(150,150,150,.3);
+	font-size: 5rem;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	padding-left: 10px;
+	padding-right: 0px;
+}
+
+#hide-statusbar-btn:hover > #hide-statusbar-btn-label {
+	color: rgba(20,20,20,.8);
+	border-radius: 0 20px 20px 0;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	padding-left: 0px;
+	margin-left: -50px;
+	padding-right: 20px;
+	margin-right: 50px;
+}
+
+#show-statusbar-btn {
+	transform: scaleY(3);
+	position: sticky;
+	padding-right: 25px;
+	padding-left: -20px;
+	margin-left: -40px;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 1rem;
+	background-color: rgba(0,0,0,0);
+	max-height: 95vh;
+	z-index: 99999;
+	border-right: 1px solid #cfcfcf;
+	margin-right: 0px;
+	border: 0;
+}
+
+#show-statusbar-btn:hover {
+	transform: scale(2,3);
+	background-image:
+		linear-gradient(
+			to left,
+			rgba(0,0,0,1) 10%,
+			rgba(255,255,255,0) 100%
+			);
+	padding-right: 80px;
+	margin-left: -100px;
+	z-index: 999999;
+	opacity: .5;
+	border: 0;
+	max-height: 95vh;
+}
+
+#show-statusbar-btn-label {
+	font-family: 'courier-new';
+	color: rgba(100,100,100,.5);
+	font-size: 5rem;
+	border-radius: 20px 0 0 20px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	padding-left: 10px;
+	padding-right: 25px;
+}
+
+#show-statusbar-btn:hover > #show-statusbar-btn-label {
+	color: rgba(20,20,20,.8);
+	border-radius: 0 20px 20px 0;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	padding-left: 10px;
+	padding-right: 20px;
+	margin-right: -100px;
+}
+
 .logo {
 	font-family: 'arial black';
 	font-size: 3rem;
@@ -18,8 +132,16 @@
 	color: #383838
 }
 
-.status-bar {
+.hidden {
+	display: none;
+}
+
+#status-bar {
 	position: sticky;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	top: 20px;
 	margin: 20px;
 	margin-top: 40px;
@@ -28,6 +150,13 @@
 	border-radius: 20px;
 	overflow-y: auto;
 	max-height: 95vh;
+	box-shadow: 1px 1px 4px #c0c0c0;
+}
+
+@media screen and (max-width: 1200px) {
+	.status-bar {
+		display: none;
+	}
 }
 
 .sub-sub-heading {
@@ -61,6 +190,7 @@
 
 .title {
 	text-align: center;
+	padding-left: 20px
 }
 
 div.ticketPreview {

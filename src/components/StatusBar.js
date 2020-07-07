@@ -5,14 +5,8 @@ import CourierDetail from "../containers/CourierDetail.js"
 
 const StatusBar = props => {
 
-	let selectedCourier = {}
-
-	const [show, setShow] = React.useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
 	return (
-		<Container fluid className='status-bar'>
+		<Container fluid id='status-bar'>
 			<Col>
 				<Accordion defaultActiveKey={'toggleCouriers'}>
 					<Row>
