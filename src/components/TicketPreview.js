@@ -13,7 +13,7 @@ const TicketPreview = props => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { client, client_id, courier, pod, courier_id, pickup, dropoff, time_ready, time_due, id, created_at, is_complete, time_delivered } = props.ticket;
+  const { client, client_id, courier, pod, courier_id, pickup, dropoff, time_ready, time_due, id, created_at, is_complete, time_delivered, is_rush, is_oversize, is_roundtrip } = props.ticket;
   const { clients, couriers } = props;
 
   const toggleComplete = () => {
@@ -27,10 +27,11 @@ const TicketPreview = props => {
   }
 
   const borderStyle = () => {
-    if ( is_complete && !pod ) { return 'danger' }
+    if ( is_complete && !pod ) { return 'warning' }
+    else if ( moment(time_due) < moment() ) { return 'danger' }
     else if ( is_complete ) { return 'success' }
-    else if ( !courier_id ) { return 'primary' }
-    else { return 'warning' }
+    else if ( !courier_id ) { return 'info' }
+    else { return 'dark' }
   }
 
   const QuickAssign = () => {
@@ -83,8 +84,9 @@ const TicketPreview = props => {
               <th>Client</th>
               <th>Pickup Address</th>
               <th>Dropoff Address</th>
-              <th>Time Due</th>
               <th>Time Ready</th>
+              <th>Time Due</th>
+              <th>Modifiers</th>
               <th>Status</th>
               <th>Assigned Couirer</th>
               <th></th>
@@ -105,14 +107,34 @@ const TicketPreview = props => {
                 <td>{pickup}</td>
                 <td>{dropoff}</td>
                 <td>
-                  {moment(time_due).format('L')}
-                  <br />
-                  {moment(time_due).format('LT')}
-                </td>
-                <td>
                   {moment(time_ready).format('L')}
                   <br />
                   {moment(time_ready).format('LT')}
+                </td>
+                {
+                  moment(time_due) < moment()
+                  ?
+                    <td className='alert-danger'>
+                      <strong>
+                        {moment(time_due).format('L')}
+                        <br />
+                        {moment(time_due).format('LT')}
+                        <br />
+                        LATE
+                      </strong>
+                    </td>
+                    :
+                      <td>
+                          {moment(time_due).format('L')}
+                          <br />
+                          {moment(time_due).format('LT')}
+                      </td>
+                }
+
+                <td>
+                  {is_rush ? <strong className='text-danger'>RUSH!!<br /></strong> : null}
+                  {is_oversize ? <em className='text-info'>Oversize<br /></em> : null}
+                  {is_roundtrip ? <em className='text-primary'>Roundtrip<br /></em> : null}
                 </td>
                   {
                     is_complete

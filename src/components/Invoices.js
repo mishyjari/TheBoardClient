@@ -35,7 +35,7 @@ class Invoices extends React.Component {
       method: "DELETE",
       headers: HEADERS
     })
-    .then( res => res.json() )
+    .then( res => res.json() ) 
     .then( deletedInvoice => {
       console.log(deletedInvoice)
       const invoices = [...this.state.invoices]

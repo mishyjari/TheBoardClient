@@ -20,8 +20,12 @@ class TicketShow extends React.Component {
   handleDelete = id => {
     this.props.handleDelete(id);
     this.props.history.push('/dispatch/tickets')
-
   }
+
+  handleUpdate = ticket => {
+    this.setState({ticket}, this.props.handleUpdate(ticket))
+  }
+
   render() {
     return (
       <Container fluid>
@@ -30,8 +34,10 @@ class TicketShow extends React.Component {
             ticket={this.state.ticket}
             clients={this.props.clients}
             couriers={this.props.couriers}
-            handleUpdate={this.props.handleUpdate}
+            handleUpdate={this.handleUpdate}
             handleDelete={this.handleDelete}
+            toggleActiveMenus={() => console.log('open sesame')}
+            activeMenus={[]}
           />
         </Accordion>
       </Container>

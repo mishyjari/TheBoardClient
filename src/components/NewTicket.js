@@ -99,6 +99,7 @@ class NewTicket extends React.Component {
     // These are indicated by 'type'
     // We can (using moment.js) update the datetime accordingly based on type and value
     const field = e.target;
+    const name = field.name;
 
     if ( field.type === 'date' ){
       // Value will be a string, lets break it down
@@ -108,7 +109,7 @@ class NewTicket extends React.Component {
       const day = Number(date[2])
 
       this.setState(prevState => ({
-        [field.name]: prevState.time_ready.set({
+        [field.name]: prevState[name].set({
           "year": year,
           "month": month,
           "date": day
@@ -121,14 +122,14 @@ class NewTicket extends React.Component {
       const minute = Number(time[1]);
 
       this.setState(prevState => ({
-        [field.name]: prevState.time_ready.set({
+        [field.name]: prevState[name].set({
           "hour": hour,
           "minute": minute
         })
       }))
     }
   }
-
+  
   setPlainTextFromForm = e => {
     e.persist();
     const key = e.target.name;
@@ -399,7 +400,6 @@ class NewTicket extends React.Component {
               backgroundColor: '#fafafa'
             }}>
             <Form.Group
-              controlId='newTicket.controlInput3'
               onChange={this.setDateTimeFromForm}
             >
               <Form.Label>Time Ready: </Form.Label>
@@ -416,7 +416,6 @@ class NewTicket extends React.Component {
             </Form.Group>
             {/* Time Due - Default Ready + 3 Hours or 90min if Rush */}
             <Form.Group
-              controlId='newTicket.controlInput3'
               onChange={this.setDateTimeFromForm}
             >
               <Form.Label>Time Due: </Form.Label>
@@ -621,8 +620,7 @@ class NewTicket extends React.Component {
         <Form.Group>
           <Button
             type='submit'
-            onClick={() => document.getElementById(`ticketDetails-${this.state.id}`).className='collapse'}
-
+            onClick={() => document.getElementById(`new-ticket-accordion`).className='collapse'}
             >
             Submit
           </Button>
