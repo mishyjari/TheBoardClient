@@ -76,8 +76,8 @@ class DispatchHome extends React.Component {
 		.then( tickets => this.setState({
 			tickets: tickets,
 			// Set filteredTickets to descending order by created_at
-			filteredTickets: tickets.filter((a,b) => {
-				return a.created_at < b.created_at ? 1 : -1
+			filteredTickets: tickets.sort((a,b) => {
+				return moment(a.time_due) > moment(b.time_due)
 			}),
 			ticketSearchResultCount: null,
 			ticketFilterTitle: 'Incomplete and Unassigned Tickets',

@@ -225,7 +225,7 @@ class TicketEdit extends React.Component {
                     checked={this.state.is_rush}
                     name='is_rush'
                     onChange={this.handleChangeBoolean}
-                    label={'Rush'}
+                    label={is_rush ? 'Rush' : 'Standard'}
                   /></td>
                 </tr>
                 {
@@ -245,17 +245,40 @@ class TicketEdit extends React.Component {
                     null
                 }
                 <tr>
-                  <th>Delivered</th>
-                  <td>
-                    {
-                      time_delivered
-                      ?
-                        ''
-                      :
-                        'No'
-                    }
-                  </td>
+                  <th>Completed?</th>
+                    <td><Form.Check
+                      type='switch'
+                      id='complete-switch'
+                      checked={this.state.is_complete}
+                      name='is_complete'
+                      onChange={this.handleChangeBoolean}
+                      label={is_complete ? 'Complete' : 'Incomplete'}
+                    /></td>
                 </tr>
+                {
+                  is_complete
+                  ?
+                  <tr>
+                    <th>Time Delivered</th>
+                      <td>
+                        <Form.Group
+                          onChange={this.setDateTimeFromForm}
+                        >
+                          <Form.Control
+                            type='date'
+                            value={this.formatDateForInput(this.state.time_delivered)}
+                            name="time_delivered"
+                          />
+                          <Form.Control
+                            type='time'
+                            value={this.formatTimeForInput(this.state.time_delivered)}
+                            name="time_due"
+                          />
+                        </Form.Group>
+                      </td>
+                  </tr>
+                  : null
+                }
                 <tr>
                   <th>Courier</th>
                   <td>

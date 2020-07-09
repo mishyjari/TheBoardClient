@@ -108,6 +108,7 @@ const TicketDetail = props => {
 
       { showEdit
       ?
+
         <TicketEdit
           ticket={props.ticket}
           clients={props.clients}

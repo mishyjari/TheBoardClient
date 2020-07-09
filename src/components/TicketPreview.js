@@ -28,7 +28,7 @@ const TicketPreview = props => {
 
   const borderStyle = () => {
     if ( is_complete && !pod ) { return 'warning' }
-    else if ( moment(time_due) < moment() ) { return 'danger' }
+    else if ( (moment(time_due) < moment()) && !is_complete ) { return 'danger' }
     else if ( is_complete ) { return 'success' }
     else if ( !courier_id ) { return 'info' }
     else { return 'dark' }
@@ -112,7 +112,7 @@ const TicketPreview = props => {
                   {moment(time_ready).format('LT')}
                 </td>
                 {
-                  moment(time_due) < moment()
+                  ( (moment(time_due) < moment()) && !is_complete )
                   ?
                     <td className='alert-danger'>
                       <strong>
@@ -169,7 +169,7 @@ const TicketPreview = props => {
                eventKey={`ticketDetails-${id}`}
                block
                size="sm"
-               id={`ticketDetails-${id}`}
+               id={`ticketDetails-${id}-toggle`}
                onClick={props.toggleActiveMenus}
                active={props.activeMenus.includes(`ticketDetails-${id}`)}>
               Show Details
