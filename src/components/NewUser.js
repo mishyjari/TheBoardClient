@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button } from 'react-bootstrap';
 
 const USERS_API = 'http://localhost:3000/users'
 const HEADERS = {

@@ -1,11 +1,8 @@
 import React from 'react';
-import { Container, Row, Col, Form, Button, Table, Accordion, Dropdown, useAccordionToggle } from 'react-bootstrap';
+import { Container, Row, Col, Button, Table, Accordion, Dropdown } from 'react-bootstrap';
 import NewInvoice from './NewInvoice.js';
-import InvoiceSearch from './InvoiceSearch.js';
-import ViewInvoice from './ViewInvoice.js';
 import InvoicePreview from './InvoicePreview.js';
 import { INVOICES_API, UNPAID_INVOICES_API, CLIENTS_API, HEADERS } from '../_helpers/Apis.js';
-import moment from 'moment';
 
 class Invoices extends React.Component {
   state = {
@@ -35,12 +32,12 @@ class Invoices extends React.Component {
       method: "DELETE",
       headers: HEADERS
     })
-    .then( res => res.json() ) 
+    .then( res => res.json() )
     .then( deletedInvoice => {
       console.log(deletedInvoice)
       const invoices = [...this.state.invoices]
       const oldInvoice = invoices.find(inv => {
-        return inv.id == deletedInvoice.id
+        return inv.id === deletedInvoice.id
       });
 
       const index = invoices.indexOf(oldInvoice);
@@ -75,7 +72,7 @@ class Invoices extends React.Component {
     .then( invoice => {
       console.log(invoice)
       const invoices = this.state.invoices;
-      const oldInvoice = this.state.invoices.find(i => i.id == invoice.id)
+      const oldInvoice = this.state.invoices.find(i => i.id === invoice.id)
       const index = invoices.indexOf(oldInvoice)
 
       invoices.splice(index,1,invoice)

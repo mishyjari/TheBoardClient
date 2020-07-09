@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Container, Row, Col, Table, Form, Button } from 'react-bootstrap';
+import { Container, Table, Form, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom'
 
 class ViewInvoice extends React.Component {

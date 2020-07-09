@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
-import { Accordion, Button, Card, Table, Row, Col, Modal, Dropdown, DropdownButton } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { Accordion, Button, Card, Table, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 import TicketDetail from './TicketDetail.js';
 import NewTicket from './NewTicket.js';
 import moment from 'moment';
@@ -8,12 +8,8 @@ import moment from 'moment';
 
 
 const TicketPreview = props => {
-  // For toggling delete confirmation modal
-  const [show, setShow] = React.useState(false)
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
-  const { client, client_id, courier, pod, courier_id, pickup, dropoff, time_ready, time_due, id, created_at, is_complete, time_delivered, is_rush, is_oversize, is_roundtrip } = props.ticket;
+  const { client_id, pod, courier_id, pickup, dropoff, time_ready, time_due, id, created_at, is_complete, time_delivered, is_rush, is_oversize, is_roundtrip } = props.ticket;
   const { clients, couriers } = props;
 
   const toggleComplete = () => {
@@ -38,11 +34,11 @@ const TicketPreview = props => {
     return (
       <div>
         {
-          couriers.find(c => c.id == courier_id)
+          couriers.find(c => c.id === Number(courier_id))
           ?
             <NavLink to={`/dispatch/couriers/${courier_id}`}>
               <strong>
-                {couriers.find(c => c.id == courier_id).full_name}
+                {couriers.find(c => c.id === Number(courier_id)).full_name}
               </strong>
             </NavLink>
           :
@@ -56,6 +52,7 @@ const TicketPreview = props => {
               {
                 props.couriers.map(courier => <Dropdown.Item
                   eventKey={courier.id}
+                  key={courier.id}
                   onClick={() => assignTicket(courier.id)}
                 >
                   {courier.full_name}
@@ -78,27 +75,29 @@ const TicketPreview = props => {
           <strong> | Ordered: </strong>
           {moment(created_at).format('ddd, MMM Do YYYY, LT ')}
         </Card.Title>
-        <Card.Text>
+        <Card.Text as={'div'}>
           <Table bordered hover striped size='sm' className='text-center'>
-            <tr>
-              <th>Client</th>
-              <th>Pickup Address</th>
-              <th>Dropoff Address</th>
-              <th>Time Ready</th>
-              <th>Time Due</th>
-              <th>Modifiers</th>
-              <th>Status</th>
-              <th>Assigned Couirer</th>
-              <th></th>
-            </tr>
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Pickup Address</th>
+                <th>Dropoff Address</th>
+                <th>Time Ready</th>
+                <th>Time Due</th>
+                <th>Modifiers</th>
+                <th>Status</th>
+                <th>Assigned Couirer</th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody>
               <tr>
                 <td>
                   <strong>{
-                      clients.find(c => c.id == client_id)
+                      clients.find(c => c.id === Number(client_id))
                     ?
                       <NavLink to={`/dispatch/clients/${client_id}`}>
-                        {clients.find(c => c.id == client_id).name}
+                        {clients.find(c => c.id === Number(client_id)).name}
                       </NavLink>
                     :
                       "Guest Account"

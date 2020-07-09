@@ -1,7 +1,7 @@
 import React from 'react';
 import Login from './Login.js';
 import NewUser from './NewUser.js';
-import { Container, Row, Col, Form, Button, Tabs, Tab } from 'react-bootstrap';
+import { Container, Row, Col, Button, Tabs, Tab } from 'react-bootstrap';
 
 class PublicHome extends React.Component {
   render() {

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Modal, Button, Table, Accordion, Row, Col, Container } from 'react-bootstrap';
+import { Modal, Button, Accordion, Row, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import NewClient from '../components/NewClient.js';
 
 const ClientPreview = props => {
-  {/* Modal Handlers */}
+
   const [showClientDetail, setShowClientDetail] = React.useState(false);
   const handleClose = () => setShowClientDetail(false);
   const handleShow = () => setShowClientDetail(true);
 
-  const { client, clients, handleEdit } = props;
+  const { client, handleEdit } = props;
 
   const toggleArchive = () => {
     const clientData = {...client};

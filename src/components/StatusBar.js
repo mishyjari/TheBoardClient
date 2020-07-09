@@ -1,7 +1,6 @@
 import React from 'react';
-import { Accordion, Button, Link, Dropdown, Modal, Table, Container, Row, Col, Badge } from 'react-bootstrap';
-import { BrowserRouter as Router, NavLink } from 'react-router-dom';
-import CourierDetail from "../containers/CourierDetail.js"
+import { Accordion, Table, Container, Row, Col, Badge } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
 const StatusBar = props => {
 
@@ -16,24 +15,25 @@ const StatusBar = props => {
 							variant={'outline-secondary'}
 							size='sm'
 							eventKey={'toggleCouriers'}
-							block
 							>
 							Active Couriers &#8628;
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey={'toggleCouriers'}>
 							<Table hover striped>
-								<tr className='text-center'>
-									<th>Name</th>
-									<th>Incomplete Tickets</th>
-									<th>Tickets Today</th>
-								</tr>
+								<thead>
+									<tr className='text-center'>
+											<th>Name</th>
+											<th>Incomplete Tickets</th>
+											<th>Tickets Today</th>
+									</tr>
+								</thead>
 								<tbody>
 							{
 								props.couriers.filter(courier => courier.is_active)
 								.sort((a,b) => b.incomplete_tickets.length - a.incomplete_tickets.length)
 								.map(courier => {
 
-									return <tr className='text-center'>
+									return <tr className='text-center' key={courier.id}>
 										<td><strong>{courier.full_name}</strong></td>
 										<td><NavLink
 
@@ -74,23 +74,24 @@ const StatusBar = props => {
 							variant={'outline-secondary'}
 							size='sm'
 							eventKey={'toggleClients'}
-							block
 							>
 							Clients With Incomplete Tickets &#8628;
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey={'toggleClients'}>
 							<Table hover striped>
-								<tr className='text-center'>
-									<th>Name</th>
-									<th>Incomplete Tickets</th>
-									<th>Tickets Today</th>
-								</tr>
+								<thead>
+									<tr className='text-center'>
+										<th>Name</th>
+										<th>Incomplete Tickets</th>
+										<th>Tickets Today</th>
+									</tr>
+								</thead>
 								<tbody>
 							{
 								props.clients.filter(client => client.incomplete_tickets.length > 0)
 								.sort((a,b) => b.incomplete_tickets.length - a.incomplete_tickets.length)
 								.map(client => {
-									return <tr className='text-center'>
+									return <tr className='text-center' key={client.id}>
 										<td><strong>{client.name}</strong></td>
 										<td><NavLink
 											to='/dispatch/tickets'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col, Modal, Button, Accordion } from 'react-bootstrap';
+import { Container, Row, Modal, Button, Accordion } from 'react-bootstrap';
 
 import ViewInvoice from './ViewInvoice.js';
 import moment from 'moment';

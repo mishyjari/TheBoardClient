@@ -1,11 +1,8 @@
 import React from 'react'
-import { CLIENTS_API, INVOICES_API, HEADERS } from '../_helpers/Apis.js';
+import { CLIENTS_API } from '../_helpers/Apis.js';
 import { Container, Card, Button, Accordion, Table, Form } from 'react-bootstrap';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
-
-import InvoicePreview from './InvoicePreview.js'
-import NewClient from './NewClient.js';
 
 class ClientShow extends React.Component {
   state = {
@@ -59,7 +56,7 @@ class ClientShow extends React.Component {
   }
 
   render() {
-    const { name, id, contact_person, contact_phone, address, is_archived, tickets, tickets_today, invoices } = this.state.client
+    const { name, id, contact_person, contact_phone, address, is_archived, tickets, tickets_today } = this.state.client
     return (
       <Container fluid content={window.innerHeight}>
         <Card>

@@ -5,11 +5,7 @@ import ClientHome from './components/ClientHome.js';
 import PublicHome from './components/PublicHome.js';
 import './stylesheets/App.css';
 import { Container, Row, Col } from 'react-bootstrap';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
-import { USERS_API } from './_helpers/Apis.js'
-import { Redirect } from 'react-router-dom';
-
-import Meow from './containers/Meow.js'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class App extends React.Component {
 
@@ -17,7 +13,7 @@ class App extends React.Component {
     userSession: null
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const user_id = window.localStorage.user_id || window.sessionStorage.user_id
     if ( user_id ) {
       fetch(`USERS_API/${user_id}`)

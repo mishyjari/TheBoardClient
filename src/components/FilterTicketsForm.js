@@ -1,6 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Container } from 'react-bootstrap';
-import moment from 'moment'
+import { Form, Container } from 'react-bootstrap';
 import TicketFilters from './TicketFilters.js';
 
 class FilterTicketsForm extends React.Component {

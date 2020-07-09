@@ -1,24 +1,17 @@
 import React from 'react';
 import CourierList from '../containers/CourierList.js'
 import TicketList from "./TicketList";
-import TicketDetail from './TicketDetail.js';
 import ClientList from "../containers/ClientList.js";
 import StatusBar from "./StatusBar";
-import NewTicket from './NewTicket.js';
-import SearchForm from './SearchForm.js';
 import NewUser from './NewUser.js';
 import Invoices from './Invoices.js';
 import NewToast from './NewToast.js';
 import moment from 'moment';
-import Pagination from 'react-js-pagination';
-import { Container, Row, Col, Tab, Tabs, Nav, Button, Alert } from 'react-bootstrap';
-import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { TICKETS_API,
-	ACTIVE_TICKETS_API,
-	TICKETS_TODAY_API,
 	CLIENTS_API,
 	COURIERS_API,
-	INCOMPLETE_COURIER_TICKETS_API,
 	INCOMPLETE_UNASSIGNED_TICKETS_API,
 	HEADERS } from '../_helpers/Apis.js'
 
@@ -65,7 +58,7 @@ class DispatchHome extends React.Component {
 		.then( couriers => this.setState({
 			couriers: couriers,
 			// set filter by first_name
-			filteredCouriers: couriers.sort((a,b) => (b.first_name < b.first_name ? 1 : -1))
+			filteredCouriers: couriers.sort((a,b) => (a.first_name < b.first_name ? 1 : -1))
 				.filter(c => !c.is_archived)
 		 }))
 	}
@@ -85,12 +78,11 @@ class DispatchHome extends React.Component {
 	}
 
 
-	componentWillMount() {
+	componentDidMount() {
 		this.populateTickets();
 		this.populatecouriers();
 		this.populateclients();
 	}
-
 
 	/* ============= TICKET FUNCTIONS ============ */
 
@@ -129,14 +121,14 @@ class DispatchHome extends React.Component {
 
 			// Update the ticket instance in courier's association
 			const courier = ticket.courier_id
-				? this.state.couriers.find(c => c.id == ticket.courier_id)
+				? this.state.couriers.find(c => c.id === ticket.courier_id)
 				:	null
 
 			if ( courier ) { this.handleUpdateCourier(courier) }
 
 			// Update the ticket instance in client's association
 			const client = ticket.client_id
-				? this.state.clients.find(c => c.id == ticket.client_id)
+				? this.state.clients.find(c => c.id === ticket.client_id)
 				:	null
 
 			if ( client ) { this.handleUpdateClient(client) }
@@ -189,7 +181,7 @@ class DispatchHome extends React.Component {
 	}
 
 	getTicketById = id => {
-		return this.state.tickets.find(ticket => ticket.id == id)
+		return this.state.tickets.find(ticket => ticket.id === Number(id))
 	}
 
 	selectTicketById = id => {
@@ -233,7 +225,7 @@ class DispatchHome extends React.Component {
 	}
 
 	showIncompleteCourierTickets = courier_id => {
-		const courier = this.state.couriers.find(c => c.id == courier_id)
+		const courier = this.state.couriers.find(c => c.id === Number(courier_id))
 		this.setState({
 			filteredTickets: courier.incomplete_tickets,
 			ticketFilterTitle: `Incomplete Tickets for courier ${courier.full_name}`
@@ -241,7 +233,7 @@ class DispatchHome extends React.Component {
 	}
 
 	showCourierTicketsToday = courier_id => {
-		const courier = this.state.couriers.find(c => c.id == courier_id)
+		const courier = this.state.couriers.find(c => c.id === Number(courier_id))
 		this.setState({
 			filteredTickets: courier.tickets_today,
 			ticketFilterTitle: `Ticket Today for courier ${courier.full_name}`
@@ -249,7 +241,7 @@ class DispatchHome extends React.Component {
 	}
 
 	showIncompleteClientTickets = client_id => {
-		const client = this.state.clients.find(c => c.id == client_id)
+		const client = this.state.clients.find(c => c.id === Number(client_id))
 		this.setState({
 			filteredTickets: client.incomplete_tickets,
 			ticketFilterTitle: `Incomplete Tickets for client ${client.name}`
@@ -284,12 +276,12 @@ class DispatchHome extends React.Component {
 		.then( res => res.json() )
 		.then( courier => {
 			const couriers = [...this.state.couriers]
-			const oldData = couriers.find(c => c.id == courier.id)
+			const oldData = couriers.find(c => c.id === courier.id)
 			const index = couriers.indexOf(oldData)
 
 			const filteredCouriers = [...this.state.filteredCouriers]
-			const oldFilteredData = filteredCouriers.find(c => c.id == courier.id)
-			const filteredIndex = filteredCouriers.indexOf(oldData)
+			const oldFilteredData = filteredCouriers.find(c => c.id === courier.id)
+			const filteredIndex = filteredCouriers.indexOf(oldFilteredData)
 
 			couriers.splice(index,1,courier)
 			filteredIndex >= 0
@@ -338,7 +330,7 @@ class DispatchHome extends React.Component {
 		.then( res => res.json() )
 		.then( courier => {
 			const couriers = this.state.couriers;
-			const deletedCourier = couriers.find(c => c.id == courier.id);
+			const deletedCourier = couriers.find(c => c.id === courier.id);
 			const index = couriers.indexOf(deletedCourier);
 			couriers.splice(index,1)
 
@@ -425,7 +417,7 @@ class DispatchHome extends React.Component {
 		.then( client => {
 			const clients = this.state.clients;
 
-			const deletedClient = clients.find(c => c.id == client.id);
+			const deletedClient = clients.find(c => c.id === client.id);
 			const index = clients.indexOf(deletedClient);
 			clients.splice(index,1)
 
@@ -439,7 +431,7 @@ class DispatchHome extends React.Component {
 	handleNewToast = (heading, text) => {
 		const handleClose = id => {
 			const toasts = this.state.toasts;
-			toasts.splice(toasts.indexOf(toasts.find(t => t.id == id)), 1)
+			toasts.splice(toasts.indexOf(toasts.find(t => t.id === Number(id))), 1)
 			this.setState({ toasts })
 		}
 		const toast = <NewToast
@@ -493,7 +485,7 @@ class DispatchHome extends React.Component {
 											data-toggle='tab'
 											role='tab'
 											aria-controls='tickets'
-											selected='true'
+											selected={true}
 											>
 											Tickets
 										</NavLink>
@@ -506,7 +498,7 @@ class DispatchHome extends React.Component {
 											data-toggle='tab'
 											role='tab'
 											aria-controls='clients'
-											selected='false'
+											selected={false}
 											>
 											Clients
 										</NavLink>
@@ -519,7 +511,7 @@ class DispatchHome extends React.Component {
 											data-toggle='tab'
 											role='tab'
 											aria-controls='clients'
-											selected='false'
+											selected={false}
 											>
 											Couriers
 										</NavLink>
@@ -532,7 +524,7 @@ class DispatchHome extends React.Component {
 											data-toggle='tab'
 											role='tab'
 											aria-controls='invoices'
-											selected='false'
+											selected={false}
 											>
 											Invoices
 										</NavLink>
@@ -554,7 +546,6 @@ class DispatchHome extends React.Component {
 										handleNewTicket={this.handleNewTicket}
 										filterTickets={this.handleFilterTickets}
 										search={this.handleSearch}
-										handlePageChange={this.fetchTicketPage}
 										prevQuery={this.state.prevQuery}
 										ticketSearchResultCount={this.state.ticketSearchResultCount}
 										handlePageChange={this.handlePageChange}

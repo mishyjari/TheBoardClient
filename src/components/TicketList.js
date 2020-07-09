@@ -1,12 +1,11 @@
 import React from  'react';
 import TicketPreview from './TicketPreview.js';
-import { Accordion, Col, Row, Button, Form, Container, Tab } from 'react-bootstrap';
+import { Accordion, Col, Row, Button, Container } from 'react-bootstrap';
 import { NavLink, Route } from 'react-router-dom'
 import FilterTicketsForm from './FilterTicketsForm.js'
 import NewTicket from './NewTicket.js';
 import SearchForm from './SearchForm.js';
 import TicketShow from './TicketShow.js';
-import { TICKETS_API } from '../_helpers/Apis.js';
 import Pagination from 'react-js-pagination';
 
 
@@ -131,7 +130,6 @@ class TicketList extends React.Component {
 										tickets={this.props.searchRes}
 										couriers={this.props.couriers}
 										clients={this.props.clients}
-										couriers={this.props.couriers}
 										search={this.props.search}
 									/>
 									</Col>
@@ -149,6 +147,7 @@ class TicketList extends React.Component {
 										<h1>No Tickets Found</h1>
 									:
 										this.props.tickets.map(ticket => <TicketPreview
+											key={ticket.id}
 											ticket={ticket}
 											clients={this.props.clients}
 											couriers={this.props.couriers}

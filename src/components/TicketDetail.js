@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment'
-import { Form, Table, Modal, Button, Container, Accordion, Row, Col, Card, useAccordionToggle } from 'react-bootstrap';
-import NewTicket from './NewTicket.js';
+import { Form, Table, Modal, Button, Container, Accordion, Row, Col } from 'react-bootstrap';
 import TicketEdit from './TicketEdit.js';
 import PodCard from './PodCard.js';
 
@@ -14,7 +13,7 @@ const TicketDetail = props => {
 
   const [showEdit, setShowEdit] = React.useState(false)
 
-  const { base_charge, client, pod, time_delivered, clients, courier, couriers, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
+  const { client, pod, time_delivered, courier, pickup, dropoff, time_ready, time_due, id, created_at, is_complete  } = props
 
 
   return (

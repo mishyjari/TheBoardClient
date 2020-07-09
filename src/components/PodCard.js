@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, Form, Col } from 'react-bootstrap';
 import moment from 'moment'
-import { setDateTimeFromForm, prefixZero, formatDateForInput, DateAndTimeSelector } from '../_helpers/DateTimeHelpers.js';
+import { prefixZero } from '../_helpers/DateTimeHelpers.js';
 
 class PodCard extends React.Component {
   state = {
@@ -103,7 +103,7 @@ class PodCard extends React.Component {
                       Complete Ticket
                     </Button>
                   :
-                    <Button variant={'secondary'} diabled>Enter POD</Button>
+                    <Button variant={'secondary'} disabled>Enter POD</Button>
                 }
               </Form.Row>
             </Form.Group>

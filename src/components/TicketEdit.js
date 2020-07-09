@@ -20,7 +20,7 @@ class TicketEdit extends React.Component {
 
   handleChangeCourier = e => {
     e.persist();
-    const courier = this.props.couriers.find(c => c.full_name == e.target.value)
+    const courier = this.props.couriers.find(c => c.full_name === e.target.value)
     this.setState({
       courier: courier ? courier : null,
       courier_id: courier ? courier.id : null
@@ -28,13 +28,13 @@ class TicketEdit extends React.Component {
   }
 
   getCourierNameById = id => {
-    const courier = this.props.couriers.find(c => c.id == id);
+    const courier = this.props.couriers.find(c => c.id === Number(id));
     return courier ? courier.full_name : 'Unassigned'
   }
 
   handleChangeClient = e => {
     e.persist();
-    const client = this.props.clients.find(c => c.name == e.target.value)
+    const client = this.props.clients.find(c => c.name === e.target.value)
     this.setState({
       client: client ? client : null,
       client_id: client ? client.id : null
@@ -42,7 +42,7 @@ class TicketEdit extends React.Component {
   }
 
   getClientNameById = id => {
-    const client = this.props.clients.find(c => c.id == id);
+    const client = this.props.clients.find(c => c.id === Number(id));
     return client ? client.name : 'Guest Account'
   }
 
@@ -123,8 +123,8 @@ class TicketEdit extends React.Component {
     ticket.time_delivered = moment(ticket.time_delivered);
 
     this.setState( ticket, () => {
-      const courierName = this.props.couriers.find(c => c.id == this.state.courier_id);
-      const clientName = this.props.clients.find(c => c.id == this.state.client_id);
+      const courierName = this.props.couriers.find(c => c.id === Number(this.state.courier_id));
+      const clientName = this.props.clients.find(c => c.id === Number(this.state.client_id));
       this.setState({
         clientName: clientName ? clientName.name : 'Guest Account',
         courierName: courierName ? courierName.full_name : 'Unassigned',
@@ -152,17 +152,13 @@ class TicketEdit extends React.Component {
       roundtrip_charge,
       base_charge,
       additional_charge,
-      total_charge,
       created_at,
       time_ready,
       time_due,
       time_delivered,
       is_complete,
       pod,
-      id,
-      client,
       client_id,
-      courier,
       courier_id,
       notes
     } = this.state;
@@ -187,12 +183,12 @@ class TicketEdit extends React.Component {
                     >
                       <Form.Control
                         type='date'
-                        value={this.formatDateForInput(this.state.time_ready)}
+                        value={this.formatDateForInput(time_ready)}
                         name="time_ready"
                       />
                       <Form.Control
                         type='time'
-                        value={this.formatTimeForInput(this.state.time_ready)}
+                        value={this.formatTimeForInput(time_ready)}
                         name="time_ready"
                       />
                     </Form.Group>
@@ -206,12 +202,12 @@ class TicketEdit extends React.Component {
                     >
                       <Form.Control
                         type='date'
-                        value={this.formatDateForInput(this.state.time_due)}
+                        value={this.formatDateForInput(time_due)}
                         name="time_due"
                       />
                       <Form.Control
                         type='time'
-                        value={this.formatTimeForInput(this.state.time_due)}
+                        value={this.formatTimeForInput(time_due)}
                         name="time_due"
                       />
                     </Form.Group>
@@ -266,12 +262,12 @@ class TicketEdit extends React.Component {
                         >
                           <Form.Control
                             type='date'
-                            value={this.formatDateForInput(this.state.time_delivered)}
+                            value={this.formatDateForInput(time_delivered)}
                             name="time_delivered"
                           />
                           <Form.Control
                             type='time'
-                            value={this.formatTimeForInput(this.state.time_delivered)}
+                            value={this.formatTimeForInput(time_delivered)}
                             name="time_due"
                           />
                         </Form.Group>
@@ -373,7 +369,7 @@ class TicketEdit extends React.Component {
                     >
                       <option>Guest Account</option>
                       {
-                        this.props.clients.map(c => <option>{c.name}</option>)
+                        this.props.clients.map(c => <option key={c.id}>{c.name}</option>)
                       }
                     </Form.Control>
                   </td>

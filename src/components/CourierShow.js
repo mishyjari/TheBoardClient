@@ -4,8 +4,6 @@ import { Container, Card, Button, Accordion, Table, Form } from 'react-bootstrap
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
 
-import NewCourier from './NewCourier.js';
-
 class CourierShow extends React.Component {
   state = {
     courier: {

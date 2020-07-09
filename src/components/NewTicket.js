@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Col, Row, Button, Accordion, Card } from 'react-bootstrap';
+import { Form, Col, Button, Accordion, Card } from 'react-bootstrap';
 import moment from 'moment'
 
 class NewTicket extends React.Component {
@@ -9,17 +9,16 @@ class NewTicket extends React.Component {
     courier_id: null,
     time_ready: moment(),
     time_due: null,
-    pickup: null,
-    pickup_contact: null,
-    pickup_details: null,
-    dropoff: null,
-    dropoff_contact: null,
-    dropoff_details: null,
+    pickup: '',
+    pickup_contact: '',
+    pickup_details: '',
+    dropoff: '',
+    dropoff_contact: '',
+    dropoff_details: '',
     is_rush: false,
-    rush_details: null,
+    rush_details: '',
     is_oversize: false,
-    oversize_details: null,
-    notes: null,
+    oversize_details: '',
     base_charge: 0,
     rush_charge: 0,
     oversize_charge: 0,
@@ -28,14 +27,13 @@ class NewTicket extends React.Component {
     roundtrip_details: null,
     roundtrip_charge: 0,
     additional_charge: 0,
-    notes: null,
+    notes: '',
     total_charge: 0,
     activeMenus: [],
   };
 
   totalCharge = () => {
     let sum = 0
-    const { roundtrip_charge, oversize_charge, rush_charge, additional_charge, base_charge } = this.state
     const charges = [this.state.roundtrip_charge, this.state.oversize_charge, this.state.rush_charge, this.state.additional_charge, this.state.base_charge]
     charges.forEach(charge => {
       if (charge) { sum += Number(charge) }
@@ -68,12 +66,12 @@ class NewTicket extends React.Component {
   }
 
   findCourierNameById = id => {
-    const courier = this.props.couriers.find(courier => courier.id == id)
+    const courier = this.props.couriers.find(courier => courier.id === Number(id))
     return courier ? courier.full_name : "Unassigned"
   }
 
   findClientNameById = id => {
-    const client = this.props.clients.find(client => client.id == id)
+    const client = this.props.clients.find(client => client.id === Number(id))
     return client ? client.name : "Guest Account"
   }
 
@@ -129,7 +127,7 @@ class NewTicket extends React.Component {
       }))
     }
   }
-  
+
   setPlainTextFromForm = e => {
     e.persist();
     const key = e.target.name;
@@ -193,11 +191,11 @@ class NewTicket extends React.Component {
           <Form.Control
             name='client_id'
             as='select'
-            value={this.findClientNameById(this.state.client_id)}
+            defaultValue={this.findClientNameById(this.state.client_id)}
           >
             <option>Guest Account</option>
             {
-              this.props.clients.map(client => <option>{client.name}</option>)
+              this.props.clients.map(client => <option key={client.id}>{client.name}</option>)
             }
           </Form.Control>
         </Form.Group>
@@ -213,11 +211,11 @@ class NewTicket extends React.Component {
           <Form.Control
             name='courier_id'
             as='select'
-            value={this.findCourierNameById(this.state.courier_id)}
+            defaultValue={this.findCourierNameById(this.state.courier_id)}
           >
             <option>Unassigned</option>
             {
-              this.props.couriers.map(courier => <option>{courier.full_name}</option>)
+              this.props.couriers.map(courier => <option key={courier.id}>{courier.full_name}</option>)
             }
           </Form.Control>
         </Form.Group>
@@ -253,21 +251,21 @@ class NewTicket extends React.Component {
             <Form.Label>Pickup Address: </Form.Label>
             <Form.Control
               type='text'
-              value={this.state.pickup}
+              defaultValue={this.state.pickup}
               name='pickup'
-              placeHolder='Enter Full Address for Pickup'
+              placeholder='Enter Full Address for Pickup'
             />
             <Form.Control
               type='text'
-              value={this.state.pickup_contact}
+              defaultValue={this.state.pickup_contact}
               name='pickup_contact'
-              placeHolder='Pickup Contact (name, phone, etc)'
+              placeholder='Pickup Contact (name, phone, etc)'
             />
             <Form.Control
               as='textarea'
-              value={this.state.pickup_details}
+              defaultValue={this.state.pickup_details}
               name='pickup_details'
-              placeHolder='Additional Pickup Details'
+              placeholder='Additional Pickup Details'
             />
           </Form.Group>
         </Card>
@@ -303,21 +301,21 @@ class NewTicket extends React.Component {
             <Form.Label>Dropoff Address: </Form.Label>
             <Form.Control
               type='text'
-              value={this.state.dropoff}
+              defaultValue={this.state.dropoff}
               name='dropoff'
-              placeHolder='Enter Full Address for Dropoff'
+              placeholder='Enter Full Address for Dropoff'
             />
             <Form.Control
               type='text'
-              value={this.state.dropoff_contact}
+              defaultValue={this.state.dropoff_contact}
               name='dropoff_contact'
-              placeHolder='Dropoff Contact (name, phone, etc)'
+              placeholder='Dropoff Contact (name, phone, etc)'
             />
             <Form.Control
               as='textarea'
-              value={this.state.dropoff_details}
+              defaultValue={this.state.dropoff_details}
               name='dropoff_details'
-              placeHolder='Additional Dropoff Details'
+              placeholder='Additional Dropoff Details'
             />
           </Form.Group>
         </Card>
@@ -364,7 +362,7 @@ class NewTicket extends React.Component {
                   as='textarea'
                   value={this.state.roundtrip_details}
                   name='roundtrip_details'
-                  placeHolder='Roundtrip Details'
+                  placeholder='Roundtrip Details'
                   onChange={this.setPlainTextFromForm}
                 />
               :
@@ -405,12 +403,12 @@ class NewTicket extends React.Component {
               <Form.Label>Time Ready: </Form.Label>
               <Form.Control
                 type='date'
-                value={this.formatDateForInput(this.state.time_ready)}
+                defaultValue={this.formatDateForInput(this.state.time_ready)}
                 name="time_ready"
               />
               <Form.Control
                 type='time'
-                value={this.formatTimeForInput(this.state.time_ready)}
+                defaultValue={this.formatTimeForInput(this.state.time_ready)}
                 name="time_ready"
               />
             </Form.Group>
@@ -421,12 +419,12 @@ class NewTicket extends React.Component {
               <Form.Label>Time Due: </Form.Label>
               <Form.Control
                 type='date'
-                value={this.formatDateForInput(this.state.time_due)}
+                defaultValue={this.formatDateForInput(this.state.time_due)}
                 name="time_due"
               />
               <Form.Control
                 type='time'
-                value={this.formatTimeForInput(this.state.time_due)}
+                defaultValue={this.formatTimeForInput(this.state.time_due)}
                 name="time_due"
               />
               <Form.Check
@@ -445,7 +443,7 @@ class NewTicket extends React.Component {
                     as='textarea'
                     value={this.state.rush_details}
                     name='rush_details'
-                    placeHolder='Rush Details'
+                    placeholder='Rush Details'
                     onChange={this.setPlainTextFromForm}
                   />
                 :
@@ -495,7 +493,7 @@ class NewTicket extends React.Component {
                   as='textarea'
                   value={this.state.oversize_details}
                   name='oversize_details'
-                  placeHolder='Oversize Details'
+                  placeholder='Oversize Details'
                   onChange={this.setPlainTextFromForm}
                 />
               :
@@ -547,7 +545,7 @@ class NewTicket extends React.Component {
           <Form.Label>Base Charge: </Form.Label>
           <Form.Control
             type='number'
-            value={this.state.base_charge}
+            defaultValue={this.state.base_charge}
             name='base_charge'
           />
         </Form.Group>
@@ -561,7 +559,7 @@ class NewTicket extends React.Component {
               <Form.Label>Roundtrip Charge: </Form.Label>
               <Form.Control
                 type='number'
-                value={this.state.roundtrip_charge}
+                defaultValue={this.state.roundtrip_charge}
                 name='roundtrip_charge'
               />
             </Form.Group>
@@ -578,7 +576,7 @@ class NewTicket extends React.Component {
               <Form.Label>Rush Charge: </Form.Label>
               <Form.Control
                 type='number'
-                value={this.state.rush_charge}
+                defaultValue={this.state.rush_charge}
                 name='rush_charge'
               />
             </Form.Group>
@@ -595,7 +593,7 @@ class NewTicket extends React.Component {
               <Form.Label>Oversize Charge: </Form.Label>
               <Form.Control
                 type='number'
-                value={this.state.oversize_charge}
+                defaultValue={this.state.oversize_charge}
                 name='oversize_charge'
               />
             </Form.Group>
@@ -609,7 +607,7 @@ class NewTicket extends React.Component {
           <Form.Label>Additonal Charge: </Form.Label>
           <Form.Control
             type='number'
-            value={this.state.additional_charge}
+            defaultValue={this.state.additional_charge}
             name='additional_charge'
           />
         </Form.Group>

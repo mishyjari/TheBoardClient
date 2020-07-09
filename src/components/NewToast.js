@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toast, Row, Col, Button } from 'react-bootstrap';
+import { Toast, Row, Col } from 'react-bootstrap';
 
 const NewToast = props => {
   const [show, setShow] = React.useState(true);

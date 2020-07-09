@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Form, Row, Col, Button } from 'react-bootstrap';
+import { Container, Form, Col, Button } from 'react-bootstrap';
 
 class NewClient extends React.Component {
 
@@ -18,18 +18,16 @@ class NewClient extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    {
-      if ( this.props.client ){
-        this.props.handleEditClient(this.state)
-        this.setState({
-          name: '',
-          address: '',
-          contact_person: '',
-          contact_phone: ''
-        })
-      } else {
-        this.props.handleNewClient(this.state)
-      }
+    if ( this.props.client ){
+      this.props.handleEditClient(this.state)
+      this.setState({
+        name: '',
+        address: '',
+        contact_person: '',
+        contact_phone: ''
+      })
+    } else {
+      this.props.handleNewClient(this.state)
     }
   }
 

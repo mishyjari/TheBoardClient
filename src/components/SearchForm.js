@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
-import ReactLoading from 'react-loading';
 
 class SearchForm extends React.Component {
   state = {
@@ -86,7 +85,7 @@ class SearchForm extends React.Component {
               <option>Unassigned Tickets</option>
               {
                 this.props.couriers.map(courier => {
-                  return <option>{courier.full_name}</option>
+                  return <option key={courier.id}>{courier.full_name}</option>
                 })
               }
             </Form.Control>
@@ -105,7 +104,7 @@ class SearchForm extends React.Component {
                 <option>Guest Tickets</option>
                 {
                   this.props.clients.map(client => {
-                    return <option>{client.name}</option>
+                    return <option key={client.id}>{client.name}</option>
                   })
                 }
               </Form.Control>

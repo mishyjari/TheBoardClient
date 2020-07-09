@@ -1,16 +1,15 @@
 import React from 'react';
-import { Modal, Button, Table, Tooltip, Accordion, Row, Container, Col } from 'react-bootstrap';
+import { Modal, Button, Accordion, Row, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import CourierDetail from "./CourierDetail.js";
 import NewCourier from "../components/NewCourier.js";
 
 const CourierPreview = props => {
-  {/* Modal Handlers */}
+
   const [show, setShow] = React.useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { id, full_name, phone, email, is_active, radio_number, tickets, incomplete_tickets, is_archived } = props.courier
+  const { id, full_name, phone, email, is_active, radio_number, incomplete_tickets, is_archived } = props.courier
 
   const toggleArchive = () => {
     const courier = {...props.courier}
