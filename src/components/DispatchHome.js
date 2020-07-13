@@ -10,9 +10,9 @@ import moment from 'moment';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { TICKETS_API,
+	TICKETS_TODAY_API,
 	CLIENTS_API,
 	COURIERS_API,
-	INCOMPLETE_UNASSIGNED_TICKETS_API,
 	HEADERS } from '../_helpers/Apis.js'
 
 class DispatchHome extends React.Component {
@@ -64,12 +64,13 @@ class DispatchHome extends React.Component {
 	}
 
 	populateTickets = () => {
-		fetch(INCOMPLETE_UNASSIGNED_TICKETS_API)
+		fetch(TICKETS_TODAY_API)
 		.then( res => res.json() )
 		.then( tickets => this.setState({
 			tickets: tickets,
 			// Set filteredTickets to descending order by created_at
-			filteredTickets: tickets.sort((a,b) => {
+			filteredTickets: tickets.filter(ticket => !ticket.is_complete)
+			.sort((a,b) => {
 				return moment(a.time_due) > moment(b.time_due)
 			}),
 			ticketSearchResultCount: null,

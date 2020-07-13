@@ -31,6 +31,7 @@ class TicketList extends React.Component {
 		this.setState({ totalResults: this.props.ticketSearchResultCount })
 	}
 
+
 	render() {
 		return (
 			<Container fluid className='list-main'>
@@ -79,7 +80,6 @@ class TicketList extends React.Component {
 									id={'new-ticket-btn'}
 									className='form-toggle-btn'
 									onClick={this.toggleActiveMenus}
-				          active={this.state.activeMenus.includes('new-ticket-btn')}
 									block
 								>
 									New Ticket
@@ -110,7 +110,6 @@ class TicketList extends React.Component {
 									id={'search-toggle-btn'}
 									className='form-toggle-btn'
 									onClick={this.toggleActiveMenus}
-				          active={this.state.activeMenus.includes('search-toggle-btn')}
 									block
 								>
 									Filters and Search

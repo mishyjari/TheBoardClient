@@ -50,7 +50,8 @@ const TicketPreview = props => {
             >
               <Dropdown.Header>Assign to Courier...</Dropdown.Header>
               {
-                props.couriers.map(courier => <Dropdown.Item
+                props.couriers.filter(courier => courier.is_active)
+                .map(courier => <Dropdown.Item
                   eventKey={courier.id}
                   key={courier.id}
                   onClick={() => assignTicket(courier.id)}

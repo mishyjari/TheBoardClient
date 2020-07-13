@@ -5,14 +5,15 @@ import moment from 'moment';
 class TicketFilters extends React.Component {
 
   state = {
-    selectedFilter: 'incomplete-unassigned'
+    selectedFilter: ''
   }
 
   handleChange = e => {
     e.persist();
     const selectedFilter = e.target.name;
-    const heading = e.target.id
+    const heading = e.target.id;
     this.setState({ selectedFilter }, () => {
+
       const filterTickets = this.props.filterTickets;
       const filter = this.state.selectedFilter;
 
@@ -36,10 +37,10 @@ class TicketFilters extends React.Component {
         ), heading)
       }
     });
-    document.getElementById('searchToggle').className='collapse'
   }
 
   render() {
+
 
     return (
       <Container>
@@ -50,7 +51,7 @@ class TicketFilters extends React.Component {
             label='Incomplete and Unassigned Tickets'
             name='incomplete-unassigned'
             id='Incomplete and Unassigned Tickets'
-            defaultChecked={this.state.selectedFilter === 'incomplete-unassigned'}
+            checked={this.state.selectedFilter === 'incomplete-unassigned'}
           >
           </Form.Check>
           <Form.Check
@@ -59,7 +60,7 @@ class TicketFilters extends React.Component {
             label='All Tickets Today'
             name='today'
             id='All Tickets Today'
-            defaultChecked={this.state.selectedFilter === 'today'}
+            checked={this.state.selectedFilter === 'today'}
           >
           </Form.Check>
           <Form.Check
@@ -68,7 +69,7 @@ class TicketFilters extends React.Component {
             label='Completed Tickets Today'
             name='completed'
             id='Completed Tickets Today'
-            defaultChecked={this.state.selectedFilter === 'completed'}
+            checked={this.state.selectedFilter === 'completed'}
           >
           </Form.Check>
           <Form.Check
@@ -77,7 +78,7 @@ class TicketFilters extends React.Component {
             label='Unassigned Tickets Only'
             name='unassigned'
             id='Unassigned Tickets Only'
-            defaultChecked={this.state.selectedFilter === 'unassigned'}
+            checked={this.state.selectedFilter === 'unassigned'}
           >
           </Form.Check>
           <Form.Check
@@ -86,7 +87,7 @@ class TicketFilters extends React.Component {
             label='Incomplete Tickets Only'
             name='incomplete'
             id='Incomplete Tickets Only'
-            defaultChecked={this.state.selectedFilter === 'incomplete'}
+            checked={this.state.selectedFilter === 'incomplete'}
           >
           </Form.Check>
         </Form.Group>

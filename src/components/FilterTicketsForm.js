@@ -25,8 +25,6 @@ class FilterTicketsForm extends React.Component {
 
             </Form.Row>
 
-
-
             <Form.Row>
               <Form.Label>Sort By: </Form.Label>
               <Form.Control
