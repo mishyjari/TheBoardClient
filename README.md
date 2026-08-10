@@ -1,3 +1,5 @@
+> **Historical project (2020):** This repository is preserved as a read-only record and is no longer maintained. Dependencies and deployment links may be outdated.
+
 **THE BOARD is an open source dispatching application for courier companies to manage and track on-demand deliveries. It is designed as a single-page application in React to minimize requests to and from the back-end.**
 
 This application is designed to work with a Rails API available [here](https://github.com/mishyjari/TheBoardApi)
